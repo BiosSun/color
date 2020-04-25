@@ -1,0 +1,9 @@
+{
+  "name": "@nami/color",
+  "version": "1.0.0",
+  "description": "A color parser, converter, formatter.",
+  "main": "index.js",
+  "repository": "https://gitlab.biossun.xyz/biossun/color.git",
+  "author": "Bios Sun <biossun@gmail.com>",
+  "license": "MIT"
+}
