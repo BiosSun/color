@@ -1,9 +1,18 @@
 {
-  "name": "@nami/color",
-  "version": "1.0.0",
-  "description": "A color parser, converter, formatter.",
-  "main": "index.js",
-  "repository": "https://gitlab.biossun.xyz/biossun/color.git",
-  "author": "Bios Sun <biossun@gmail.com>",
-  "license": "MIT"
+    "name": "@nami/color",
+    "version": "1.0.0",
+    "description": "A color parser, converter, formatter.",
+    "main": "index.js",
+    "repository": "https://gitlab.biossun.xyz/biossun/color.git",
+    "author": "Bios Sun <biossun@gmail.com>",
+    "license": "MIT",
+    "scripts": {
+        "test": "jest"
+    },
+    "devDependencies": {
+        "@types/jest": "^25.2.1",
+        "jest": "^25.4.0",
+        "ts-jest": "^25.4.0",
+        "typescript": "^3.8.3"
+    }
 }
