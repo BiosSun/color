@@ -32,7 +32,8 @@ describe('parse', () => {
         expect(color('rgb(255, 255, 255)')).toEqual({ model: 'rgb', format: 'rgb', alpha: undefined, value: [255, 255, 255] })
         expect(color('rgb(0, 119, 187)')).toEqual({ model: 'rgb', format: 'rgb', alpha: undefined, value: [0, 119, 187] })
         expect(color('rgb(0, 0, 0)')).toEqual({ model: 'rgb', format: 'rgb', alpha: undefined, value: [0, 0, 0] })
-        expect(color(' rgb(.2, -300.3, 20.3)    ')).toEqual({ model: 'rgb', format: 'rgb', alpha: undefined, value: [0.2, -300.3, 20.3] })
+        expect(color('rgb(.4, 0.5, 20.3)')).toEqual({ model: 'rgb', format: 'rgb', alpha: undefined, value: [0, 1, 20] })
+        expect(color(' rgb(-.2, -100, 256)    ')).toEqual({ model: 'rgb', format: 'rgb', alpha: undefined, value: [0, 0, 255] })
     })
 
     test('rgba(255, 255, 255, 1)', () => {
@@ -40,20 +41,37 @@ describe('parse', () => {
         expect(color('rgba(255, 255, 255, 0.87)')).toEqual({ model: 'rgb', format: 'rgb', alpha: 0.87, value: [255, 255, 255] })
         expect(color('rgba(255, 255, 255, .87)')).toEqual({ model: 'rgb', format: 'rgb', alpha: 0.87, value: [255, 255, 255] })
         expect(color('rgba(255, 255, 255, 0.866667)')).toEqual({ model: 'rgb', format: 'rgb', alpha: 0.866667, value: [255, 255, 255] })
-        expect(color('rgba(255, 255, 255, 2)')).toEqual({ model: 'rgb', format: 'rgb', alpha: 2, value: [255, 255, 255] })
-        expect(color(' rgba(255, 255, 255, -1.3)    ')).toEqual({ model: 'rgb', format: 'rgb', alpha: -1.3, value: [255, 255, 255] })
+        expect(color('rgba(255, 255, 255, 2)')).toEqual({ model: 'rgb', format: 'rgb', alpha: 1, value: [255, 255, 255] })
+        expect(color(' rgba(255, 255, 255, -1.3)    ')).toEqual({ model: 'rgb', format: 'rgb', alpha: 0, value: [255, 255, 255] })
     })
 
     test('hsl(0, 0%, 100%)', () => {
-        expect(color('hsl(0, 0%, 100%)')).toEqual({ model: 'hsl', format: 'hsl', alpha: undefined, value: [0, 0, 100] })
-        expect(color('hsl(0, 50%, 100%)')).toEqual({ model: 'hsl', format: 'hsl', alpha: undefined, value: [0, 50, 100] })
-        expect(color('hsl(202, 100%, 37%)')).toEqual({ model: 'hsl', format: 'hsl', alpha: undefined, value: [202, 100, 37] })
-        expect(color('hsl(370, 100%, 37%)')).toEqual({ model: 'hsl', format: 'hsl', alpha: undefined, value: [370, 100, 37] })
-        expect(color('hsl(-370, 100%, 37%)')).toEqual({ model: 'hsl', format: 'hsl', alpha: undefined, value: [-370, 100, 37] })
-        expect(color('hsl(0, 120%, -120%)')).toEqual({ model: 'hsl', format: 'hsl', alpha: undefined, value: [0, 120, -120] })
-        expect(color('hsl(0.0001, 100.00%, 37.12345%)')).toEqual({ model: 'hsl', format: 'hsl', alpha: undefined, value: [0.0001, 100, 37.12345] })
+        expect(color('hsl(0,     0%,     50%)')).toEqual({ model: 'hsl', format: 'hsl', alpha: undefined, value: [0, 0, 50] })
+        expect(color('hsl(0,     50%,    50%)')).toEqual({ model: 'hsl', format: 'hsl', alpha: undefined, value: [0, 50, 50] })
+
+        expect(color('hsl(202,   100%,   50% )')).toEqual({ model: 'hsl', format: 'hsl', alpha: undefined, value: [202, 100, 50] })
+        expect(color('hsl(370,   100%,   50% )')).toEqual({ model: 'hsl', format: 'hsl', alpha: undefined, value: [10, 100, 50] })
+        expect(color('hsl(-370,  100%,   50% )')).toEqual({ model: 'hsl', format: 'hsl', alpha: undefined, value: [350, 100, 50] })
+        expect(color('hsl(20.01, 100%,   50% )')).toEqual({ model: 'hsl', format: 'hsl', alpha: undefined, value: [20, 100, 50] })
+
+        expect(color('hsl(202,   0.2%,   50% )')).toEqual({ model: 'hsl', format: 'hsl', alpha: undefined, value: [202, 0, 50] })
+        expect(color('hsl(202,   .2%,    50% )')).toEqual({ model: 'hsl', format: 'hsl', alpha: undefined, value: [202, 0, 50] })
+        expect(color('hsl(202,   .5%,    50% )')).toEqual({ model: 'hsl', format: 'hsl', alpha: undefined, value: [202, 1, 50] })
+        expect(color('hsl(202,   -.5%,   50% )')).toEqual({ model: 'hsl', format: 'hsl', alpha: undefined, value: [202, 0, 50] })
+        expect(color('hsl(202,   100.7%, 50% )')).toEqual({ model: 'hsl', format: 'hsl', alpha: undefined, value: [202, 100, 50] })
+
+        expect(color('hsl(202,   100%,   0%    )')).toEqual({ model: 'hsl', format: 'hsl', alpha: undefined, value: [202, 0, 0] })
+        expect(color('hsl(202,   100%,   100%  )')).toEqual({ model: 'hsl', format: 'hsl', alpha: undefined, value: [202, 0, 100] })
+        expect(color('hsl(202,   100%,   50.4% )')).toEqual({ model: 'hsl', format: 'hsl', alpha: undefined, value: [202, 100, 50] })
+        expect(color('hsl(202,   100%,   50.5% )')).toEqual({ model: 'hsl', format: 'hsl', alpha: undefined, value: [202, 100, 51] })
+        expect(color('hsl(202,   100%,   .555% )')).toEqual({ model: 'hsl', format: 'hsl', alpha: undefined, value: [202, 100, 1] })
+        expect(color('hsl(202,   100%,   -.5%  )')).toEqual({ model: 'hsl', format: 'hsl', alpha: undefined, value: [202, 0, 0] })
+        expect(color('hsl(202,   100%,   100.5%)')).toEqual({ model: 'hsl', format: 'hsl', alpha: undefined, value: [202, 0, 100] })
+
+        expect(color('hsl(0, 120%, -120%)')).toEqual({ model: 'hsl', format: 'hsl', alpha: undefined, value: [0, 0, 0] })
+        expect(color('hsl(0.0001, 100.00%, 37.12345%)')).toEqual({ model: 'hsl', format: 'hsl', alpha: undefined, value: [0, 100, 37] })
         expect(color('hsl(0,0%,100%)')).toEqual({ model: 'hsl', format: 'hsl', alpha: undefined, value: [0, 0, 100] })
-        expect(color(' hsl(  0.0001,100.00%,    37.12345%)    ')).toEqual({ model: 'hsl', format: 'hsl', alpha: undefined, value: [0.0001, 100, 37.12345] })
+        expect(color(' hsl(  0.0001,100.00%,    37.12345%)    ')).toEqual({ model: 'hsl', format: 'hsl', alpha: undefined, value: [0, 100, 37] })
     })
 
     test('hsla(0, 0%, 100%, 1)', () => {
@@ -61,20 +79,37 @@ describe('parse', () => {
         expect(color('hsla(0, 0%, 100%, 0.87)')).toEqual({ model: 'hsl', format: 'hsl', alpha: 0.87, value: [0, 0, 100] })
         expect(color('hsla(0, 0%, 100%, .87)')).toEqual({ model: 'hsl', format: 'hsl', alpha: 0.87, value: [0, 0, 100] })
         expect(color('hsla(0, 0%, 100%, .866667)')).toEqual({ model: 'hsl', format: 'hsl', alpha: 0.866667, value: [0, 0, 100] })
-        expect(color('hsla(0, 0%, 100%, 2)')).toEqual({ model: 'hsl', format: 'hsl', alpha: 2, value: [0, 0, 100] })
-        expect(color(' hsla(  0,0%,  100%,   -1.3    )    ')).toEqual({ model: 'hsl', format: 'hsl', alpha: -1.3, value: [0, 0, 100] })
+        expect(color('hsla(0, 0%, 100%, 2)')).toEqual({ model: 'hsl', format: 'hsl', alpha: 1, value: [0, 0, 100] })
+        expect(color(' hsla(  0,0%,  100%,   -1.3    )    ')).toEqual({ model: 'hsl', format: 'hsl', alpha: 0, value: [0, 0, 100] })
     })
 
     test('hsv(0, 0%, 100%)', () => {
-        expect(color('hsv(0, 0%, 100%)')).toEqual({ model: 'hsv', format: 'hsv', alpha: undefined, value: [0, 0, 100] })
-        expect(color('hsv(0, 50%, 100%)')).toEqual({ model: 'hsv', format: 'hsv', alpha: undefined, value: [0, 50, 100] })
-        expect(color('hsv(202, 100%, 37%)')).toEqual({ model: 'hsv', format: 'hsv', alpha: undefined, value: [202, 100, 37] })
-        expect(color('hsv(370, 100%, 37%)')).toEqual({ model: 'hsv', format: 'hsv', alpha: undefined, value: [370, 100, 37] })
-        expect(color('hsv(-370, 100%, 37%)')).toEqual({ model: 'hsv', format: 'hsv', alpha: undefined, value: [-370, 100, 37] })
-        expect(color('hsv(0, 120%, -120%)')).toEqual({ model: 'hsv', format: 'hsv', alpha: undefined, value: [0, 120, -120] })
-        expect(color('hsv(0.0001, 100.00%, 37.12345%)')).toEqual({ model: 'hsv', format: 'hsv', alpha: undefined, value: [0.0001, 100, 37.12345] })
+        expect(color('hsv(0,     0%,     50%)')).toEqual({ model: 'hsv', format: 'hsv', alpha: undefined, value: [0, 0, 50] })
+        expect(color('hsv(0,     50%,    50%)')).toEqual({ model: 'hsv', format: 'hsv', alpha: undefined, value: [0, 50, 50] })
+
+        expect(color('hsv(202,   100%,   50% )')).toEqual({ model: 'hsv', format: 'hsv', alpha: undefined, value: [202, 100, 50] })
+        expect(color('hsv(370,   100%,   50% )')).toEqual({ model: 'hsv', format: 'hsv', alpha: undefined, value: [10, 100, 50] })
+        expect(color('hsv(-370,  100%,   50% )')).toEqual({ model: 'hsv', format: 'hsv', alpha: undefined, value: [350, 100, 50] })
+        expect(color('hsv(20.01, 100%,   50% )')).toEqual({ model: 'hsv', format: 'hsv', alpha: undefined, value: [20, 100, 50] })
+
+        expect(color('hsv(202,   0.2%,   50% )')).toEqual({ model: 'hsv', format: 'hsv', alpha: undefined, value: [202, 0, 50] })
+        expect(color('hsv(202,   .2%,    50% )')).toEqual({ model: 'hsv', format: 'hsv', alpha: undefined, value: [202, 0, 50] })
+        expect(color('hsv(202,   .5%,    50% )')).toEqual({ model: 'hsv', format: 'hsv', alpha: undefined, value: [202, 1, 50] })
+        expect(color('hsv(202,   -.5%,   50% )')).toEqual({ model: 'hsv', format: 'hsv', alpha: undefined, value: [202, 0, 50] })
+        expect(color('hsv(202,   100.7%, 50% )')).toEqual({ model: 'hsv', format: 'hsv', alpha: undefined, value: [202, 100, 50] })
+
+        expect(color('hsv(202,   100%,   0%    )')).toEqual({ model: 'hsv', format: 'hsv', alpha: undefined, value: [202, 0, 0] })
+        expect(color('hsv(202,   100%,   100%  )')).toEqual({ model: 'hsv', format: 'hsv', alpha: undefined, value: [202, 100, 100] })
+        expect(color('hsv(202,   100%,   50.4% )')).toEqual({ model: 'hsv', format: 'hsv', alpha: undefined, value: [202, 100, 50] })
+        expect(color('hsv(202,   100%,   50.5% )')).toEqual({ model: 'hsv', format: 'hsv', alpha: undefined, value: [202, 100, 51] })
+        expect(color('hsv(202,   100%,   .555% )')).toEqual({ model: 'hsv', format: 'hsv', alpha: undefined, value: [202, 100, 1] })
+        expect(color('hsv(202,   100%,   -.5%  )')).toEqual({ model: 'hsv', format: 'hsv', alpha: undefined, value: [202, 0, 0] })
+        expect(color('hsv(202,   100%,   100.5%)')).toEqual({ model: 'hsv', format: 'hsv', alpha: undefined, value: [202, 100, 100] })
+
+        expect(color('hsv(0, 120%, -120%)')).toEqual({ model: 'hsv', format: 'hsv', alpha: undefined, value: [0, 0, 0] })
+        expect(color('hsv(0.001, 100.00%, 37.12345%)')).toEqual({ model: 'hsv', format: 'hsv', alpha: undefined, value: [0, 100, 37] })
         expect(color('hsv(0,0%,100%)')).toEqual({ model: 'hsv', format: 'hsv', alpha: undefined, value: [0, 0, 100] })
-        expect(color('hsv(   0.0001,100.00%,    37.12345%)')).toEqual({ model: 'hsv', format: 'hsv', alpha: undefined, value: [0.0001, 100, 37.12345] })
+        expect(color(' hsv(  0.0001,100.00%,    37.12345%)    ')).toEqual({ model: 'hsv', format: 'hsv', alpha: undefined, value: [0, 100, 37] })
     })
 
     test('hsva(0, 0%, 100%, 1)', () => {
@@ -82,29 +117,46 @@ describe('parse', () => {
         expect(color('hsva(0, 0%, 100%, 0.87)')).toEqual({ model: 'hsv', format: 'hsv', alpha: 0.87, value: [0, 0, 100] })
         expect(color('hsva(0, 0%, 100%, .87)')).toEqual({ model: 'hsv', format: 'hsv', alpha: 0.87, value: [0, 0, 100] })
         expect(color('hsva(0, 0%, 100%, .866667)')).toEqual({ model: 'hsv', format: 'hsv', alpha: 0.866667, value: [0, 0, 100] })
-        expect(color('hsva(0, 0%, 100%, 2)')).toEqual({ model: 'hsv', format: 'hsv', alpha: 2, value: [0, 0, 100] })
-        expect(color('hsva(    0,     0%, 100%, -1.3)')).toEqual({ model: 'hsv', format: 'hsv', alpha: -1.3, value: [0, 0, 100] })
+        expect(color('hsva(0, 0%, 100%, 2)')).toEqual({ model: 'hsv', format: 'hsv', alpha: 1, value: [0, 0, 100] })
+        expect(color('hsva(    0,     0%, 100%, -1.3)')).toEqual({ model: 'hsv', format: 'hsv', alpha: 0, value: [0, 0, 100] })
     })
 
     test('hsb(0, 0%, 100%)', () => {
-        expect(color('hsb(0, 0%, 100%)')).toEqual({ model: 'hsv', format: 'hsb', alpha: undefined, value: [0, 0, 100] })
-        expect(color('hsb(0, 50%, 100%)')).toEqual({ model: 'hsv', format: 'hsb', alpha: undefined, value: [0, 50, 100] })
-        expect(color('hsb(202, 100%, 37%)')).toEqual({ model: 'hsv', format: 'hsb', alpha: undefined, value: [202, 100, 37] })
-        expect(color('hsb(370, 100%, 37%)')).toEqual({ model: 'hsv', format: 'hsb', alpha: undefined, value: [370, 100, 37] })
-        expect(color('hsb(-370, 100%, 37%)')).toEqual({ model: 'hsv', format: 'hsb', alpha: undefined, value: [-370, 100, 37] })
-        expect(color('hsb(0, 120%, -120%)')).toEqual({ model: 'hsv', format: 'hsb', alpha: undefined, value: [0, 120, -120] })
-        expect(color('hsb(0.0001, 100.00%, 37.12345%)')).toEqual({ model: 'hsv', format: 'hsb', alpha: undefined, value: [0.0001, 100, 37.12345] })
+        expect(color('hsb(0,     0%,     50%)')).toEqual({ model: 'hsv', format: 'hsb', alpha: undefined, value: [0, 0, 50] })
+        expect(color('hsb(0,     50%,    50%)')).toEqual({ model: 'hsv', format: 'hsb', alpha: undefined, value: [0, 50, 50] })
+
+        expect(color('hsb(202,   100%,   50% )')).toEqual({ model: 'hsv', format: 'hsb', alpha: undefined, value: [202, 100, 50] })
+        expect(color('hsb(370,   100%,   50% )')).toEqual({ model: 'hsv', format: 'hsb', alpha: undefined, value: [10, 100, 50] })
+        expect(color('hsb(-370,  100%,   50% )')).toEqual({ model: 'hsv', format: 'hsb', alpha: undefined, value: [350, 100, 50] })
+        expect(color('hsb(20.01, 100%,   50% )')).toEqual({ model: 'hsv', format: 'hsb', alpha: undefined, value: [20, 100, 50] })
+
+        expect(color('hsb(202,   0.2%,   50% )')).toEqual({ model: 'hsv', format: 'hsb', alpha: undefined, value: [202, 0, 50] })
+        expect(color('hsb(202,   .2%,    50% )')).toEqual({ model: 'hsv', format: 'hsb', alpha: undefined, value: [202, 0, 50] })
+        expect(color('hsb(202,   .5%,    50% )')).toEqual({ model: 'hsv', format: 'hsb', alpha: undefined, value: [202, 1, 50] })
+        expect(color('hsb(202,   -.5%,   50% )')).toEqual({ model: 'hsv', format: 'hsb', alpha: undefined, value: [202, 0, 50] })
+        expect(color('hsb(202,   100.7%, 50% )')).toEqual({ model: 'hsv', format: 'hsb', alpha: undefined, value: [202, 100, 50] })
+
+        expect(color('hsb(202,   100%,   0%    )')).toEqual({ model: 'hsv', format: 'hsb', alpha: undefined, value: [202, 0, 0] })
+        expect(color('hsb(202,   100%,   100%  )')).toEqual({ model: 'hsv', format: 'hsb', alpha: undefined, value: [202, 100, 100] })
+        expect(color('hsb(202,   100%,   50.4% )')).toEqual({ model: 'hsv', format: 'hsb', alpha: undefined, value: [202, 100, 50] })
+        expect(color('hsb(202,   100%,   50.5% )')).toEqual({ model: 'hsv', format: 'hsb', alpha: undefined, value: [202, 100, 51] })
+        expect(color('hsb(202,   100%,   .555% )')).toEqual({ model: 'hsv', format: 'hsb', alpha: undefined, value: [202, 100, 1] })
+        expect(color('hsb(202,   100%,   -.5%  )')).toEqual({ model: 'hsv', format: 'hsb', alpha: undefined, value: [202, 0, 0] })
+        expect(color('hsb(202,   100%,   100.5%)')).toEqual({ model: 'hsv', format: 'hsb', alpha: undefined, value: [202, 100, 100] })
+
+        expect(color('hsb(0, 120%, -120%)')).toEqual({ model: 'hsv', format: 'hsb', alpha: undefined, value: [0, 0, 0] })
+        expect(color('hsb(0.001, 100.00%, 37.12345%)')).toEqual({ model: 'hsv', format: 'hsb', alpha: undefined, value: [0, 100, 37] })
         expect(color('hsb(0,0%,100%)')).toEqual({ model: 'hsv', format: 'hsb', alpha: undefined, value: [0, 0, 100] })
-        expect(color('hsb(    0.0001,100.00%,37.12345%)')).toEqual({ model: 'hsv', format: 'hsb', alpha: undefined, value: [0.0001, 100, 37.12345] })
+        expect(color(' hsb(  0.0001,100.00%,    37.12345%)    ')).toEqual({ model: 'hsv', format: 'hsb', alpha: undefined, value: [0, 100, 37] })
     })
 
-    test('hsba(0, 0%, 100%, 1)', () => {
+    test('hsva(0, 0%, 100%, 1)', () => {
         expect(color('hsba(0, 0%, 100%, 1)')).toEqual({ model: 'hsv', format: 'hsb', alpha: 1, value: [0, 0, 100] })
         expect(color('hsba(0, 0%, 100%, 0.87)')).toEqual({ model: 'hsv', format: 'hsb', alpha: 0.87, value: [0, 0, 100] })
         expect(color('hsba(0, 0%, 100%, .87)')).toEqual({ model: 'hsv', format: 'hsb', alpha: 0.87, value: [0, 0, 100] })
         expect(color('hsba(0, 0%, 100%, .866667)')).toEqual({ model: 'hsv', format: 'hsb', alpha: 0.866667, value: [0, 0, 100] })
-        expect(color('hsba(0, 0%, 100%, 2)')).toEqual({ model: 'hsv', format: 'hsb', alpha: 2, value: [0, 0, 100] })
-        expect(color('      hsba(0, 0%, 100%, -1.3)      ')).toEqual({ model: 'hsv', format: 'hsb', alpha: -1.3, value: [0, 0, 100] })
+        expect(color('hsba(0, 0%, 100%, 2)')).toEqual({ model: 'hsv', format: 'hsb', alpha: 1, value: [0, 0, 100] })
+        expect(color('hsba(    0,     0%, 100%, -1.3)')).toEqual({ model: 'hsv', format: 'hsb', alpha: 0, value: [0, 0, 100] })
     })
 
     test('invalids', () => {

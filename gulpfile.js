@@ -6,7 +6,7 @@ gulp.task('benchmark', () => {
     const tsp = ts.createProject('./tsconfig.json')
 
     return gulp
-        .src(['index.ts', 'index.benchmark.ts'])
+        .src(['*.ts'])
         .pipe(tsp())
         .pipe(gulp.dest('./output'))
         .on('end', () => {
