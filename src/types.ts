@@ -3,7 +3,7 @@ export type HSLTuple = [number, number, number]
 export type HSVTuple = [number, number, number]
 
 export type ColorModel = 'rgb' | 'hsl' | 'hsv'
-export type ColorFormat = 'hex' | 'abbr-hex' | 'rgb' | 'hsl' | 'hsv' | 'hsb'
+export type ColorFormat = 'hex' | 'abbr_hex' | 'rgb' | 'hsl' | 'hsv' | 'hsb'
 export type ColorValue = RGBTuple | HSLTuple | HSVTuple
 
 export interface ColorInfo {

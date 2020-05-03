@@ -25,7 +25,7 @@ const abbr_hexs = new Set([
 ])
 
 const formater = {
-    'abbr-hex'(info: ColorInfo): string {
+    abbr_hex(info: ColorInfo): string {
         const [r, g, b] = info.value
 
         if (!abbr_hexs.has(r) || !abbr_hexs.has(g) || !abbr_hexs.has(b)) {

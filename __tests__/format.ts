@@ -2,8 +2,8 @@ import color from '../src/index'
 import { ColorInfo } from '../src/types'
 
 describe('format', () => {
-    test('abbr-hex', () => {
-        const info = { model: 'rgb', format: 'abbr-hex', alpha: undefined, value: [255, 255, 255] } as ColorInfo
+    test('abbr_hex', () => {
+        const info = { model: 'rgb', format: 'abbr_hex', alpha: undefined, value: [255, 255, 255] } as ColorInfo
 
         expect(color.format({ ...info, value: [255, 255, 255] })).toBe('#fff')
         expect(color.format({ ...info, value: [0, 170, 221] })).toBe('#0ad')

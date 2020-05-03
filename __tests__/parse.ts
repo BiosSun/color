@@ -2,16 +2,16 @@ import color from '../src/index'
 
 describe('parse', () => {
     test('#FFF', () => {
-        expect(color('#FFF')).toEqual({ model: 'rgb', format: 'abbr-hex', alpha: undefined, value: [255, 255, 255] })
-        expect(color('#0Ad')).toEqual({ model: 'rgb', format: 'abbr-hex', alpha: undefined, value: [0, 170, 221] })
-        expect(color(' #000    ')).toEqual({ model: 'rgb', format: 'abbr-hex', alpha: undefined, value: [0, 0, 0] })
+        expect(color('#FFF')).toEqual({ model: 'rgb', format: 'abbr_hex', alpha: undefined, value: [255, 255, 255] })
+        expect(color('#0Ad')).toEqual({ model: 'rgb', format: 'abbr_hex', alpha: undefined, value: [0, 170, 221] })
+        expect(color(' #000    ')).toEqual({ model: 'rgb', format: 'abbr_hex', alpha: undefined, value: [0, 0, 0] })
     })
 
     test('#FFFF', () => {
-        expect(color('#FFFF')).toEqual({ model: 'rgb', format: 'abbr-hex', alpha: 1, value: [255, 255, 255] })
-        expect(color('#FFFD')).toEqual({ model: 'rgb', format: 'abbr-hex', alpha: 0xdd / 255, value: [255, 255, 255] })
-        expect(color('#FFFd')).toEqual({ model: 'rgb', format: 'abbr-hex', alpha: 0xdd / 255, value: [255, 255, 255] })
-        expect(color(' #FFF0    ')).toEqual({ model: 'rgb', format: 'abbr-hex', alpha: 0, value: [255, 255, 255] })
+        expect(color('#FFFF')).toEqual({ model: 'rgb', format: 'abbr_hex', alpha: 1, value: [255, 255, 255] })
+        expect(color('#FFFD')).toEqual({ model: 'rgb', format: 'abbr_hex', alpha: 0xdd / 255, value: [255, 255, 255] })
+        expect(color('#FFFd')).toEqual({ model: 'rgb', format: 'abbr_hex', alpha: 0xdd / 255, value: [255, 255, 255] })
+        expect(color(' #FFF0    ')).toEqual({ model: 'rgb', format: 'abbr_hex', alpha: 0, value: [255, 255, 255] })
     })
 
     test('#FFFFFF', () => {
