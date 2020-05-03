@@ -1,7 +1,12 @@
-import { ColorInfo, ColorFormat } from './types'
+import { ColorInfo, ColorFormat, formatToModel } from './types'
 import { abbrHex, hex } from './utils'
+import convert from './convert'
 
-export default function format(info: ColorInfo): string {
+export default function format(info: ColorInfo, format?: ColorFormat): string {
+    if (format && format !== info.format) {
+        info = convert(info, formatToModel[format], format)
+    }
+
     return formater[info.format](info)
 }
 

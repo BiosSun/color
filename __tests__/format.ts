@@ -85,4 +85,17 @@ describe('format', () => {
         expect(color.format({ ...info, alpha: 0.5 })).toBe('hsba(0, 0%, 100%, 0.5)')
         expect(color.format({ ...info, alpha: 0 })).toBe('hsba(0, 0%, 100%, 0)')
     })
+
+    test('force format', () => {
+        const info = { model: 'hsv', format: 'hsb', alpha: undefined, value: [0, 0, 100] } as ColorInfo
+
+        expect(color.format(info, 'rgb')).toBe('rgb(255, 255, 255)')
+        expect(color.format(info, 'abbr_hex')).toBe('#fff')
+        expect(color.format(info, 'hex')).toBe('#ffffff')
+
+        // alpha
+        expect(color.format({ ...info, alpha: 1 }, 'rgb')).toBe('rgba(255, 255, 255, 1)')
+        expect(color.format({ ...info, alpha: 0.4 }, 'abbr_hex')).toBe('#fff6')
+        expect(color.format({ ...info, alpha: 0 }, 'hex')).toBe('#ffffff00')
+    })
 })

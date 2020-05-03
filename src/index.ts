@@ -2,6 +2,7 @@ import parse from './parse'
 import normalize from './normalize'
 import { ColorInfo } from './types'
 import format from './format'
+import convert from './convert'
 
 export default function color(str: string): ColorInfo {
     const info = parse(str)
@@ -14,3 +15,4 @@ export default function color(str: string): ColorInfo {
 }
 
 color.format = format
+color.convert = convert
