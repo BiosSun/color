@@ -1,4 +1,4 @@
-import color from '../index'
+import color from '../src/index'
 
 describe('parse', () => {
     test('#FFF', () => {

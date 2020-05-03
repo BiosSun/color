@@ -1,6 +1,6 @@
 import { Suite } from 'benchmark'
 import * as colorString from 'color-string'
-import color from './index'
+import color from '../src/index'
 
 function bench(value: string) {
     console.log(`\n> ${value}`)

@@ -1,16 +1,20 @@
 const gulp = require('gulp')
-const ts = require('gulp-typescript')
 const shelljs = require('shelljs')
+const rollup = require('rollup')
+const rollupTypescript = require('@rollup/plugin-typescript')
 
-gulp.task('benchmark', () => {
-    const tsp = ts.createProject('./tsconfig.json')
+gulp.task('benchmark', async () => {
+    const bundle = await rollup.rollup({
+        input: './benchmark/index.ts',
+        external: ['benchmark', 'color-string', /node_modules/],
+        plugins: [rollupTypescript()],
+    })
 
-    return gulp
-        .src(['*.ts'])
-        .pipe(tsp())
-        .pipe(gulp.dest('./output'))
-        .on('end', () => {
-            shelljs.cd(__dirname)
-            shelljs.exec('node ./output/index.benchmark.js')
-        })
+    await bundle.write({
+        file: './output/benchmark.js',
+        format: 'cjs',
+    })
+
+    shelljs.cd(__dirname)
+    shelljs.exec('node ./output/benchmark.js')
 })

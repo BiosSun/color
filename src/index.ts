@@ -11,5 +11,3 @@ export default function color(str: string): ColorInfo {
 
     return info
 }
-
-console.info(color('hsba(0, 0%, 100%, 1)'))
