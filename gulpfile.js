@@ -1,5 +1,6 @@
 const gulp = require('gulp')
 const shelljs = require('shelljs')
+const ts = require('gulp-typescript')
 const rollup = require('rollup')
 const rollupTypescript = require('@rollup/plugin-typescript')
 
@@ -17,4 +18,9 @@ gulp.task('benchmark', async () => {
 
     shelljs.cd(__dirname)
     shelljs.exec('node ./output/benchmark.js')
+})
+
+gulp.task('build', async () => {
+    const tsp = ts.createProject('./tsconfig.json')
+    return gulp.src(['src/*.ts']).pipe(tsp()).pipe(gulp.dest('./'))
 })

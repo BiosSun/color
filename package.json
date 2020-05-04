@@ -8,8 +8,18 @@
     "license": "MIT",
     "scripts": {
         "test": "jest",
-        "start": "jest --watch"
+        "start": "jest --watch",
+        "prepublishOnly": "gulp build"
     },
+    "files": [
+        "/index.js",
+        "/types.js",
+        "/utils.js",
+        "/parse.js",
+        "/normalize.js",
+        "/convert.js",
+        "/format.js"
+    ],
     "devDependencies": {
         "@rollup/plugin-typescript": "^4.1.1",
         "@types/benchmark": "^1.0.31",
