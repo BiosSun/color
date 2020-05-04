@@ -1,4 +1,4 @@
-# @nami/color
+# @biossun/color
 
 提供颜色解析、转换及格式化功能。
 
@@ -9,10 +9,17 @@
 -   hsl: `hsl(0, 0%, 100%)`, `hsla(0, 0%, 100%)`;
 -   hsv/hsb: `hsv(0, 0%, 100%)`, `hsba(0, 0%, 100%)`;
 
+## 安装
+
+```bash
+$ npm i @biossun/color
+$ yarn add @biossun/color
+```
+
 ## 解析
 
 ```javascript
-import color from '@nami/color'
+import color from '@biossun/color'
 
 color('#0ad')
 // => { model: 'rgb', format: 'abbr_hex', value: [0, 170, 221], alpha: undefined }
@@ -33,7 +40,7 @@ color('hsba(202, 98%, 75%, .2'))
 ## 转换
 
 ```javascript
-import color from '@nami/color'
+import color from '@biossun/color'
 
 const info = color('#0379bed')
 
@@ -47,7 +54,7 @@ color.convert(info, 'hsv', 'hsb')
 ## 格式化
 
 ```javascript
-import color from '@nami/color'
+import color from '@biossun/color'
 
 const info = color('#0379bed')
 
