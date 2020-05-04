@@ -89,9 +89,14 @@ export interface ColorInfo {
 // 解析颜色字符串
 Color(str: string) => ColorInfo
 
-// 转换颜色到指定模式（及格式），若 model 和 format 与 info 相同则直接返回，若 format 与 modal 不匹配则抛出异常
-Color.convert(info: ColorInfo, model: ColorModel, format?: ColorForamt = model) => ColorInfo
+// 转换颜色到指定模式（及格式）
+// - 若 model 与 info 相同且 format 未指定或同样与 info 相同则返回原 info；
+// - 若未指定 format 则默认与 model 相同；
+// - 若指定的 format 与 modal 不匹配则抛出异常。
+Color.convert(info: ColorInfo, model: ColorModel, format?: ColorForamt) => ColorInfo
 
-// 格式化颜色，默认按 info 中的格式处理，可以单独指定格式，内部会自动转换并格式化。
+// 格式化颜色
+// - 默认按 info 中的格式处理；
+// - 也可以明确指定输出格式。
 Color.format(info: ColorInfo, format?: ColorFormat) => string
 ```

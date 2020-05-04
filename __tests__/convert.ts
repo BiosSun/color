@@ -93,15 +93,18 @@ describe('convert', () => {
         expect(Color.convert({ ...info, alpha: 1 }, 'hsl')).toEqual({ ...result, alpha: 1 })
     })
 
+    test('same model', () => {
+        const info: ColorInfo = { model: 'hsv', format: 'hsb', alpha: undefined, value: [202, 98, 75] }
+        expect(Color.convert(info, 'hsv')).toBe(info)
+    })
+
     test('format', () => {
         const info: ColorInfo = { model: 'hsv', format: 'hsb', alpha: undefined, value: [202, 98, 75] }
 
-        expect(Color.convert(info, 'rgb', 'hex')).toEqual({
-            model: 'rgb',
-            format: 'hex',
-            alpha: undefined,
-            value: [4, 123, 191],
-        })
+        expect(Color.convert(info, 'hsv', 'hsb')).toBe(info)
+
+        expect(Color.convert(info, 'hsv', 'hsv')).toEqual({ model: 'hsv', format: 'hsv', alpha: undefined, value: [202, 98, 75] })
+        expect(Color.convert(info, 'rgb', 'hex')).toEqual({ model: 'rgb', format: 'hex', alpha: undefined, value: [4, 123, 191] })
 
         expect(() => Color.convert(info, 'rgb', 'hsv')).toThrow("invalid format 'hsv' with model 'rgb'.")
     })
