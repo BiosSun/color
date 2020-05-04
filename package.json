@@ -1,5 +1,5 @@
 {
-    "name": "@nami/color",
+    "name": "@biossun/color",
     "version": "1.0.0",
     "description": "A color parser, converter, formatter.",
     "main": "index.js",
