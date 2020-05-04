@@ -4,7 +4,7 @@ import { ColorInfo } from './types'
 import format from './format'
 import convert from './convert'
 
-export default function color(str: string): ColorInfo {
+export default function Color(str: string): ColorInfo {
     const info = parse(str)
 
     if (info) {
@@ -14,7 +14,7 @@ export default function color(str: string): ColorInfo {
     return info
 }
 
-color.format = format
-color.convert = convert
+Color.format = format
+Color.convert = convert
 
 export * from './types'
