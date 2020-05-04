@@ -16,3 +16,5 @@ export default function color(str: string): ColorInfo {
 
 color.format = format
 color.convert = convert
+
+export * from './types'
