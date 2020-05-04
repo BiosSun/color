@@ -98,4 +98,8 @@ describe('format', () => {
         expect(color.format({ ...info, alpha: 0.4 }, 'abbr_hex')).toBe('#fff6')
         expect(color.format({ ...info, alpha: 0 }, 'hex')).toBe('#ffffff00')
     })
+
+    test('empty arguments', () => {
+        expect(color.format(null, 'rgb')).toBe('')
+    })
 })

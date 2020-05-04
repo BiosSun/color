@@ -3,6 +3,10 @@ import { abbrHex, hex } from './utils'
 import convert from './convert'
 
 export default function format(info: ColorInfo, format?: ColorFormat): string {
+    if (info === null) {
+        return ''
+    }
+
     if (format && format !== info.format) {
         info = convert(info, formatToModel[format], format)
     }

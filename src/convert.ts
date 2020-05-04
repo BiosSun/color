@@ -6,6 +6,10 @@ export default function convert(
     model: ColorModel,
     format: ColorFormat = model,
 ): ColorInfo {
+    if (info === null) {
+        return null
+    }
+
     if (formatToModel[format] !== model) {
         throw new Error(`invalid format '${format}' with model '${model}'.`)
     }

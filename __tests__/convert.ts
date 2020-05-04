@@ -81,7 +81,7 @@ describe('convert', () => {
     })
 
     // -----------------------------------------------------------------------------
-    // alpha
+    // other
     // -----------------------------------------------------------------------------
 
     test('alpha', () => {
@@ -93,10 +93,6 @@ describe('convert', () => {
         expect(color.convert({ ...info, alpha: 1 }, 'hsl')).toEqual({ ...result, alpha: 1 })
     })
 
-    // -----------------------------------------------------------------------------
-    // format
-    // -----------------------------------------------------------------------------
-
     test('format', () => {
         const info: ColorInfo = { model: 'hsv', format: 'hsb', alpha: undefined, value: [202, 98, 75] }
 
@@ -107,6 +103,10 @@ describe('convert', () => {
             value: [4, 123, 191],
         })
 
-        expect(() => color.convert(info, 'rgb', 'hsv')).toThrow('invalid format \'hsv\' with model \'rgb\'.')
+        expect(() => color.convert(info, 'rgb', 'hsv')).toThrow("invalid format 'hsv' with model 'rgb'.")
+    })
+
+    test('empty arguments', () => {
+        expect(color.convert(null, 'rgb')).toBe(null)
     })
 })
