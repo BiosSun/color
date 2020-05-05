@@ -29,10 +29,17 @@ export default function convert(
         }
     }
 
+    let converter = colorConvert[info.model][model]
+
+    if (info.state === 'raw') {
+        converter = converter.raw
+    }
+
     return {
         model: model,
         format: format,
+        state: info.state,
         alpha: info.alpha,
-        value: colorConvert[info.model][model](info.value),
+        value: converter(info.value),
     }
 }

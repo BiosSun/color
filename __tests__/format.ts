@@ -3,7 +3,7 @@ import { ColorInfo } from '../src/types'
 
 describe('format', () => {
     test('abbr_hex', () => {
-        const info = { model: 'rgb', format: 'abbr_hex', alpha: undefined, value: [255, 255, 255] } as ColorInfo
+        const info: ColorInfo = { model: 'rgb', format: 'abbr_hex', state: 'normalized', alpha: undefined, value: [255, 255, 255] }
 
         expect(Color.format({ ...info, value: [255, 255, 255] })).toBe('#fff')
         expect(Color.format({ ...info, value: [0, 170, 221] })).toBe('#0ad')
@@ -20,7 +20,7 @@ describe('format', () => {
     })
 
     test('hex', () => {
-        const info = { model: 'rgb', format: 'hex', alpha: undefined, value: [255, 255, 255] } as ColorInfo
+        const info: ColorInfo = { model: 'rgb', format: 'hex', state: 'normalized', alpha: undefined, value: [255, 255, 255] }
 
         expect(Color.format({ ...info, value: [255, 255, 255] })).toBe('#ffffff')
         expect(Color.format({ ...info, value: [0, 170, 221] })).toBe('#00aadd')
@@ -35,7 +35,7 @@ describe('format', () => {
     })
 
     test('rgb', () => {
-        const info = { model: 'rgb', format: 'rgb', alpha: undefined, value: [255, 255, 255] } as ColorInfo
+        const info: ColorInfo = { model: 'rgb', format: 'rgb', state: 'normalized', alpha: undefined, value: [255, 255, 255] }
 
         expect(Color.format({ ...info, value: [255, 255, 255] })).toBe('rgb(255, 255, 255)')
         expect(Color.format({ ...info, value: [0, 170, 221] })).toBe('rgb(0, 170, 221)')
@@ -48,7 +48,7 @@ describe('format', () => {
     })
 
     test('hsl', () => {
-        const info = { model: 'hsl', format: 'hsl', alpha: undefined, value: [0, 0, 100] } as ColorInfo
+        const info: ColorInfo = { model: 'hsl', format: 'hsl', state: 'normalized', alpha: undefined, value: [0, 0, 100] }
 
         expect(Color.format({ ...info, value: [0, 0, 100] })).toBe('hsl(0, 0%, 100%)')
         expect(Color.format({ ...info, value: [202, 97, 38] })).toBe('hsl(202, 97%, 38%)')
@@ -61,7 +61,7 @@ describe('format', () => {
     })
 
     test('hsv', () => {
-        const info = { model: 'hsv', format: 'hsv', alpha: undefined, value: [0, 0, 100] } as ColorInfo
+        const info: ColorInfo = { model: 'hsv', format: 'hsv', state: 'normalized', alpha: undefined, value: [0, 0, 100] }
 
         expect(Color.format({ ...info, value: [0, 0, 100] })).toBe('hsv(0, 0%, 100%)')
         expect(Color.format({ ...info, value: [202, 98, 75] })).toBe('hsv(202, 98%, 75%)')
@@ -74,7 +74,7 @@ describe('format', () => {
     })
 
     test('hsb', () => {
-        const info = { model: 'hsv', format: 'hsb', alpha: undefined, value: [0, 0, 100] } as ColorInfo
+        const info: ColorInfo = { model: 'hsv', format: 'hsb', state: 'normalized', alpha: undefined, value: [0, 0, 100] }
 
         expect(Color.format({ ...info, value: [0, 0, 100] })).toBe('hsb(0, 0%, 100%)')
         expect(Color.format({ ...info, value: [202, 98, 75] })).toBe('hsb(202, 98%, 75%)')
@@ -87,7 +87,7 @@ describe('format', () => {
     })
 
     test('force format', () => {
-        const info = { model: 'hsv', format: 'hsb', alpha: undefined, value: [0, 0, 100] } as ColorInfo
+        const info: ColorInfo = { model: 'hsv', format: 'hsb', state: 'normalized', alpha: undefined, value: [0, 0, 100] }
 
         expect(Color.format(info, 'rgb')).toBe('rgb(255, 255, 255)')
         expect(Color.format(info, 'abbr_hex')).toBe('#fff')

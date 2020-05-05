@@ -55,6 +55,7 @@ const parser = {
         return {
             model: 'rgb',
             format,
+            state: 'raw',
             value: [parseInt(rhex, 16), parseInt(ghex, 16), parseInt(bhex, 16)],
             alpha: ahex ? parseInt(ahex, 16) / 255 : undefined,
         }
@@ -85,6 +86,7 @@ const parser = {
         return {
             model: 'rgb',
             format: 'rgb',
+            state: 'raw',
             value: [h, s, l],
             alpha: hasAlpha ? alpha : undefined,
         }
@@ -124,6 +126,7 @@ const parser = {
         return {
             model,
             format,
+            state: 'raw',
             value: [h, s, l],
             alpha: hasAlpha ? alpha : undefined,
         }

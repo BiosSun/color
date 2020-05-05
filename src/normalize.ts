@@ -1,32 +1,101 @@
 import { ColorInfo, RGBTuple, HSLTuple, HSVTuple } from './types'
-import { clamp, round } from './utils'
+import { clamp, clampInt, roundInt } from './utils'
+import round from './round'
 
-export default function normalize(info: ColorInfo): void {
-    info.alpha = info.alpha !== undefined ? clamp(info.alpha, 0, 1) : undefined
-    info.value = normalizear[info.model](info.value)
+export default function normalize(info: ColorInfo): ColorInfo {
+    if (info === null) {
+        return null
+    }
+
+    if (info.state === 'normalized') {
+        return info
+    }
+
+    if (info.state === 'raw') {
+        info = round(info)
+    }
+
+    return {
+        model: info.model,
+        format: info.format,
+        state: 'normalized',
+        alpha: info.alpha,
+        value: normalizeValuesWith[info.model](info.value),
+    }
 }
 
-const normalizear = {
-    rgb(value: RGBTuple): RGBTuple {
-        return [
-            clamp(Math.round(value[0]), 0, 255),
-            clamp(Math.round(value[1]), 0, 255),
-            clamp(Math.round(value[2]), 0, 255),
-        ]
+normalize.alpha = round.alpha
+
+normalize.red = round.red
+normalize.green = round.green
+normalize.blue = round.blue
+
+normalize.hue = function (value: number, info: ColorInfo): number {
+    value = round.hue(value)
+
+    switch (info.model) {
+        case 'hsl': {
+            const s = round.saturationl(info.value[1])
+            const l = round.lightness(info.value[2])
+
+            return l === 0 || l === 100 || s === 0 ? 0 : value
+        }
+        case 'hsv': {
+            const s = round.saturationv(info.value[1])
+            const v = round.brightness(info.value[2])
+
+            return v === 0 || s === 0 ? 0 : value
+        }
+    }
+}
+
+normalize.saturationl = function (value: number, info: ColorInfo): number {
+    value = round.saturationl(value)
+    const l = round.lightness(info.value[2])
+    return l === 0 || l === 100 ? 0 : value
+}
+
+normalize.saturationv = function (value: number, info: ColorInfo): number {
+    value = round.saturationv(value)
+    const v = round.brightness(info.value[2])
+    return v === 0 ? 0 : value
+}
+
+normalize.lightness = round.lightness
+normalize.value = round.value
+normalize.brightness = round.brightness
+
+const normalizeValuesWith = {
+    rgb([r, g, b]: RGBTuple): RGBTuple {
+        return [r, g, b]
     },
 
     hsl(value: HSLTuple): HSLTuple {
-        const h = round(Math.round(value[0]), 360)
-        const l = clamp(Math.round(value[2]), 0, 100)
-        const s = l > 0 && l < 100 ? clamp(Math.round(value[1]), 0, 100) : 0
+        let h = value[0]
+        let s = value[1]
+        let l = value[2]
+
+        if (l === 0 || l === 100) {
+            s = 0
+            h = 0
+        } else if (s === 0) {
+            h = 0
+        }
 
         return [h, s, l]
     },
 
     hsv(value: HSVTuple): HSVTuple {
-        const h = round(Math.round(value[0]), 360)
-        const v = clamp(Math.round(value[2]), 0, 100)
-        const s = v > 0 ? clamp(Math.round(value[1]), 0, 100) : 0
+        let h = value[0]
+        let s = value[1]
+        let v = value[2]
+
+        if (v === 0) {
+            s = 0
+            h = 0
+        } else if (s === 0) {
+            h = 0
+        }
 
         return [h, s, v]
     },

@@ -1,20 +1,27 @@
 import parse from './parse'
+import get from './get'
+import set from './set'
+import convert from './convert'
+import format from './format'
+import round from './round'
 import normalize from './normalize'
 import { ColorInfo } from './types'
-import format from './format'
-import convert from './convert'
 
 export default function Color(str: string): ColorInfo {
-    const info = parse(str)
+    let info = parse(str)
 
-    if (info) {
-        normalize(info)
-    }
+    info = round(info)
+    info = normalize(info)
 
     return info
 }
 
-Color.format = format
+Color.parse = parse
+Color.get = get
+Color.set = set
 Color.convert = convert
+Color.format = format
+Color.round = round
+Color.normalize = normalize
 
 export * from './types'

@@ -16,9 +16,12 @@
         "/types.js",
         "/utils.js",
         "/parse.js",
-        "/normalize.js",
+        "/get.js",
+        "/set.js",
         "/convert.js",
         "/format.js",
+        "/round.js",
+        "/normalize.js",
         "/*.d.ts"
     ],
     "devDependencies": {
