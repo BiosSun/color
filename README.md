@@ -42,7 +42,7 @@ Color('hsba(202, 98%, 75%, .2'))
 ```javascript
 import Color from '@biossun/color'
 
-const info = Color('#0379bed')
+const info = Color('#0379be')
 
 Color.convert(info, 'hsv')
 // => { model: 'hsv', format: 'hsv', value: [202, 98, 75], alpha: undefined }
@@ -56,10 +56,10 @@ Color.convert(info, 'hsv', 'hsb')
 ```javascript
 import Color from '@biossun/color'
 
-const info = Color('#0379bed')
+const info = Color('#0379be')
 
 Color.format(info)
-// => '#0379bed'
+// => '#0379be'
 
 Color.format(info, 'rgb')
 // => 'rgb(3, 121, 190)'
