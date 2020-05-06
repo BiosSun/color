@@ -113,6 +113,17 @@ Color.set(info, 'saturationv', 10)
 // => { model: 'rgb', format: 'hex', value: [172, 184, 191], alpha: undefined }
 ```
 
+## 判断两个颜色是否相同
+
+检测标准化后的两个颜色值是否是同一个颜色。
+
+```javascript
+import Color from '@biossun/color'
+
+Color.isEqual(Color.parse('rgb(3, 122, 190)', Color.parse('hsv(202, 98, 75)')))
+// => true
+```
+
 ## 转换
 
 ```javascript
@@ -181,6 +192,9 @@ Color.round(info: ColorInfo) => ColorInfo
 // 将某些因受其它通道影响而不再起作用的通道的值转为该通道的初始值
 // 如在 hsl 模式中，亮度为 0 或 100 时，无论色相及对比度是什么值，颜色一律为黑色或白色，此时该方法会将色相和对比度转为 0。
 Color.normalize(info: ColorInfo) => ColorInfo
+
+// 判断两个颜色是否相同
+Color.isEqual(a: ColorInfo, b: ColorInfo) => string
 
 // 获取颜色属性值
 Color.get(info: ColorInfo, prop: ColorProperty): number

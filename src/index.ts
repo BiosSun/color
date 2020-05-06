@@ -5,6 +5,7 @@ import convert from './convert'
 import format from './format'
 import round from './round'
 import normalize from './normalize'
+import isEqual from './is-equal'
 import { ColorInfo } from './types'
 
 export default function Color(str: string): ColorInfo {
@@ -23,5 +24,6 @@ Color.convert = convert
 Color.format = format
 Color.round = round
 Color.normalize = normalize
+Color.isEqual = isEqual
 
 export * from './types'

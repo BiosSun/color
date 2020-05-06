@@ -22,6 +22,7 @@
         "/format.js",
         "/round.js",
         "/normalize.js",
+        "/is-equal.js",
         "/*.d.ts"
     ],
     "devDependencies": {
