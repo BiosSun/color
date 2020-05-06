@@ -45,7 +45,10 @@ export function abbrHex(num: number): string {
 
 export function createBuffer(info: ColorInfo): ColorInfo {
     return {
-        ...info,
+        model: info.model,
+        format: info.format,
+        state: info.state,
+        alpha: info.alpha,
         value: [...info.value] as ColorValue,
     }
 }
