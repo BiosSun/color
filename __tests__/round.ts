@@ -17,6 +17,8 @@ describe('round', () => {
             [0.5, 1],
             [255.1, 255],
             [-0.1, 0],
+
+            [undefined, undefined],
         ]
 
         suites.hue = [
@@ -37,6 +39,8 @@ describe('round', () => {
             [359.4, 359],
             [359.5, 0],
             [-0.1, 0],
+
+            [undefined, undefined],
         ]
 
         suites.saturationl = suites.lightness = suites.saturationv = suites.value = suites.brightness = [
@@ -52,6 +56,8 @@ describe('round', () => {
             [0.5, 1],
             [100.1, 100],
             [-0.1, 0],
+
+            [undefined, undefined],
         ]
 
         suites.alpha = [

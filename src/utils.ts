@@ -1,7 +1,13 @@
 import { ColorInfo, ColorValue } from './types'
 
 export function clamp(num: number, min: number, max: number): number {
-    return Math.min(Math.max(min, num), max)
+    const result = Math.min(Math.max(min, num), max)
+
+    if (isNaN(result)) {
+        return undefined
+    }
+
+    return result
 }
 
 export function clampInt(num: number, min: number, max: number): number {
@@ -20,7 +26,13 @@ export function round(num: number, range: number): number {
     }
 
     // num maybe is -0
-    return (num + range) % range
+    const result = (num + range) % range
+
+    if (isNaN(result)) {
+        return undefined
+    }
+
+    return result
 }
 
 export function roundInt(num: number, range: number): number {

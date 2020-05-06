@@ -33,6 +33,10 @@ normalize.blue = round.blue
 normalize.hue = function (value: number, info: ColorInfo): number {
     value = round.hue(value)
 
+    if (info === null) {
+        return value
+    }
+
     switch (info.model) {
         case 'hsl': {
             const s = round.saturationl(info.value[1])
@@ -51,12 +55,22 @@ normalize.hue = function (value: number, info: ColorInfo): number {
 
 normalize.saturationl = function (value: number, info: ColorInfo): number {
     value = round.saturationl(value)
+
+    if (info === null) {
+        return value
+    }
+
     const l = round.lightness(info.value[2])
     return l === 0 || l === 100 ? 0 : value
 }
 
 normalize.saturationv = function (value: number, info: ColorInfo): number {
     value = round.saturationv(value)
+
+    if (info === null) {
+        return value
+    }
+
     const v = round.brightness(info.value[2])
     return v === 0 ? 0 : value
 }
