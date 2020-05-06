@@ -212,5 +212,5 @@ Color.convert(info: ColorInfo, model: ColorModel, format?: ColorForamt) => Color
 // 格式化颜色
 // - 默认按 info 中的格式处理；
 // - 也可以明确指定输出格式。
-Color.format(info: ColorInfo, format?: ColorFormat) => string
+Color.format(info: ColorInfo, format: ColorFormat = info.format) => string
 ```

@@ -1,14 +1,19 @@
 import { ColorInfo, ColorFormat, formatToModel } from './types'
 import { abbrHex, hex } from './utils'
 import convert from './convert'
+import normalize from './normalize'
 
-export default function format(info: ColorInfo, format?: ColorFormat): string {
+export default function format(info: ColorInfo, format: ColorFormat = info?.format): string {
     if (info === null) {
         return ''
     }
 
     if (format && format !== info.format) {
         info = convert(info, formatToModel[format], format)
+    }
+
+    if ((format === 'hex' || format === 'abbr_hex') && info.state === 'raw') {
+        info = normalize(info)
     }
 
     return formater[info.format](info)

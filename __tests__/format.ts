@@ -17,6 +17,9 @@ describe('format', () => {
         // 若色值无法格式化为简写格式，则自动转为普通格式
         expect(Color.format({ ...info, value: [3, 121, 190] })).toBe('#0379be')
         expect(Color.format({ ...info, alpha: 0.5 })).toBe('#ffffff80')
+
+        // 若是 raw 状态的颜色值，则自动进行标准化处理
+        expect(Color.format({ ...info, state: 'raw', value: [254.5, 255.4, 255.5], alpha: 1.1111 })).toBe('#ffff')
     })
 
     test('hex', () => {
@@ -32,6 +35,9 @@ describe('format', () => {
         expect(Color.format({ ...info, alpha: 0.4 })).toBe('#ffffff66')
         expect(Color.format({ ...info, alpha: 0.5 })).toBe('#ffffff80')
         expect(Color.format({ ...info, alpha: 0 })).toBe('#ffffff00')
+
+        // 若是 raw 状态的颜色值，则自动进行标准化处理
+        expect(Color.format({ ...info, state: 'raw', value: [254.5, 255.4, 255.5], alpha: 1.1111 })).toBe('#ffffffff')
     })
 
     test('rgb', () => {
