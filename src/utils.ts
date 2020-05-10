@@ -25,18 +25,15 @@ export function clampIntFn(min: number, max: number): (num: number) => number {
 }
 
 export function round(num: number, range: number): number {
-    if (num < 0) {
-        num %= range
-    }
-
-    // num maybe is -0
-    const result = (num + range) % range
-
-    if (isNaN(result)) {
+    if (num > 0) {
+        return num % range || range
+    } else if (num === 0) {
+        return 0
+    } else if (isNil(num) || isNaN(num)) {
         return undefined
+    } else {
+        return ((num % range) + range) % range || 0
     }
-
-    return result
 }
 
 export function roundInt(num: number, range: number): number {

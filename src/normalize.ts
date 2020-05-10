@@ -31,7 +31,11 @@ normalize.green = round.green
 normalize.blue = round.blue
 
 normalize.hue = function (value: number, info: ColorInfo): number {
-    value = round.hue(value)
+    if (value === undefined) {
+        return undefined
+    }
+
+    value = round.hue(value) % 360
 
     if (isNil(info)) {
         return value
@@ -54,6 +58,10 @@ normalize.hue = function (value: number, info: ColorInfo): number {
 }
 
 normalize.saturationl = function (value: number, info: ColorInfo): number {
+    if (value === undefined) {
+        return undefined
+    }
+
     value = round.saturationl(value)
 
     if (isNil(info)) {
@@ -65,6 +73,10 @@ normalize.saturationl = function (value: number, info: ColorInfo): number {
 }
 
 normalize.saturationv = function (value: number, info: ColorInfo): number {
+    if (value === undefined) {
+        return undefined
+    }
+
     value = round.saturationv(value)
 
     if (isNil(info)) {
@@ -94,6 +106,8 @@ const normalizeValuesWith = {
             h = 0
         } else if (s === 0) {
             h = 0
+        } else if (h === 360) {
+            h = 0
         }
 
         return [h, s, l]
@@ -108,6 +122,8 @@ const normalizeValuesWith = {
             s = 0
             h = 0
         } else if (s === 0) {
+            h = 0
+        } else if (h === 360) {
             h = 0
         }
 
