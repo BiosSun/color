@@ -50,5 +50,6 @@ describe('get', () => {
 
     test('empty argument', () => {
         expect(Color.get(null, 'red')).toBe(undefined)
+        expect(Color.get(undefined, 'red')).toBe(undefined)
     })
 })

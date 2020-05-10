@@ -1,8 +1,8 @@
 import { ColorInfo, RGBTuple, HSLTuple, HSVTuple } from './types'
-import { clampInt, clampIntFn, roundIntFn } from './utils'
+import { clampInt, clampIntFn, roundIntFn, isNil } from './utils'
 
 export default function round(info: ColorInfo): ColorInfo {
-    if (info === null) {
+    if (isNil(info)) {
         return null
     }
 

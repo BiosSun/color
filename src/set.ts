@@ -1,11 +1,11 @@
 import { ColorInfo, ColorProperty, ColorModel } from './types'
 import convert from './convert'
-import { clampIntFn, createBuffer, roundIntFn } from './utils'
+import { clampIntFn, createBuffer, roundIntFn, isNil } from './utils'
 import round from './round'
 import normalize from './normalize'
 
 export default function set(info: ColorInfo, prop: ColorProperty, value: number): ColorInfo {
-    if (info === null) {
+    if (isNil(info)) {
         return null
     }
 

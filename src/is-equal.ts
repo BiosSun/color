@@ -1,13 +1,17 @@
 import { ColorInfo } from './types'
 import convert from './convert'
 import normalize from './normalize'
+import { isNil } from './utils'
 
 export default function isEqual(a: ColorInfo, b: ColorInfo): boolean {
-    if (a === b) {
+    const aIsNil = isNil(a)
+    const bIsNil = isNil(b)
+
+    if (aIsNil && bIsNil) {
         return true
     }
 
-    if (a === null || b === null) {
+    if (aIsNil || bIsNil) {
         return false
     }
 
@@ -37,9 +41,9 @@ function compare(a: ColorInfo, b: ColorInfo): boolean {
 
     for (let i = 0; i < avl; i++) {
         if (a.value[i] !== b.value[i]) {
-            return false;
+            return false
         }
     }
 
-    return true;
+    return true
 }

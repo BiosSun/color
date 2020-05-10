@@ -117,5 +117,6 @@ describe('convert', () => {
 
     test('empty arguments', () => {
         expect(Color.convert(null, 'rgb')).toBe(null)
+        expect(Color.convert(undefined, 'rgb')).toBe(null)
     })
 })

@@ -1,8 +1,9 @@
 import { ColorInfo, ColorProperty, ColorModel } from './types'
 import convert from './convert'
+import { isNil } from './utils'
 
 export default function get(info: ColorInfo, prop: ColorProperty): number {
-    if (info === null) {
+    if (isNil(info)) {
         return undefined
     }
 

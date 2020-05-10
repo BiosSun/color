@@ -107,5 +107,6 @@ describe('format', () => {
 
     test('empty arguments', () => {
         expect(Color.format(null, 'rgb')).toBe('')
+        expect(Color.format(undefined, 'rgb')).toBe('')
     })
 })

@@ -1,5 +1,9 @@
 import { ColorInfo, ColorValue } from './types'
 
+export function isNil(value: unknown): boolean {
+    return value === null || value === undefined
+}
+
 export function clamp(num: number, min: number, max: number): number {
     const result = Math.min(Math.max(min, num), max)
 

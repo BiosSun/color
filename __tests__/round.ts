@@ -114,6 +114,7 @@ describe('round', () => {
 
         test('others', () => {
             expect(Color.round(null)).toBe(null)
+            expect(Color.round(undefined)).toBe(null)
 
             expect(Color.round(rgb_rounded)).toBe(rgb_rounded)
             expect(Color.round(rgb_normalized)).toBe(rgb_normalized)

@@ -101,5 +101,6 @@ describe('set', () => {
 
     test('empty argument', () => {
         expect(Color.set(null, 'red', 0)).toBe(null)
+        expect(Color.set(undefined, 'red', 0)).toBe(null)
     })
 })

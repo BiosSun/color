@@ -12,6 +12,8 @@ const c_hsv: ColorInfo = { model: 'hsv', format: 'hsv', state: 'raw', alpha: und
 test('is-equal', () => {
     // both is null
     expect(Color.isEqual(null, null)).toBe(true)
+    expect(Color.isEqual(undefined, undefined)).toBe(true)
+    expect(Color.isEqual(null, undefined)).toBe(true)
 
     // same color info
     expect(Color.isEqual(w_rgb, w_rgb)).toBe(true)

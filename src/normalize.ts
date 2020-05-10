@@ -1,9 +1,9 @@
 import { ColorInfo, RGBTuple, HSLTuple, HSVTuple } from './types'
-import { clamp, clampInt, roundInt } from './utils'
+import { clamp, clampInt, roundInt, isNil } from './utils'
 import round from './round'
 
 export default function normalize(info: ColorInfo): ColorInfo {
-    if (info === null) {
+    if (isNil(info)) {
         return null
     }
 
@@ -33,7 +33,7 @@ normalize.blue = round.blue
 normalize.hue = function (value: number, info: ColorInfo): number {
     value = round.hue(value)
 
-    if (info === null) {
+    if (isNil(info)) {
         return value
     }
 
@@ -56,7 +56,7 @@ normalize.hue = function (value: number, info: ColorInfo): number {
 normalize.saturationl = function (value: number, info: ColorInfo): number {
     value = round.saturationl(value)
 
-    if (info === null) {
+    if (isNil(info)) {
         return value
     }
 
@@ -67,7 +67,7 @@ normalize.saturationl = function (value: number, info: ColorInfo): number {
 normalize.saturationv = function (value: number, info: ColorInfo): number {
     value = round.saturationv(value)
 
-    if (info === null) {
+    if (isNil(info)) {
         return value
     }
 

@@ -1,12 +1,13 @@
 import * as colorConvert from 'color-convert'
 import { ColorInfo, ColorModel, ColorFormat, formatToModel } from './types'
+import { isNil } from './utils'
 
 export default function convert(
     info: ColorInfo,
     model: ColorModel,
     format?: ColorFormat,
 ): ColorInfo {
-    if (info === null) {
+    if (isNil(info)) {
         return null
     }
 

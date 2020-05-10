@@ -1,10 +1,10 @@
 import { ColorInfo, ColorFormat, formatToModel } from './types'
-import { abbrHex, hex } from './utils'
+import { abbrHex, hex, isNil } from './utils'
 import convert from './convert'
 import normalize from './normalize'
 
 export default function format(info: ColorInfo, format: ColorFormat = info?.format): string {
-    if (info === null) {
+    if (isNil(info)) {
         return ''
     }
 
