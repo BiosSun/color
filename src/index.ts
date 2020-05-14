@@ -1,29 +1,24 @@
 import parse from './parse'
-import get from './get'
-import set from './set'
-import convert from './convert'
-import format from './format'
-import round from './round'
-import normalize from './normalize'
-import isEqual from './is-equal'
 import { ColorInfo } from './types'
 
-export default function Color(str: string): ColorInfo {
-    let info = parse(str)
+class Color {
+    info: ColorInfo = null
 
-    info = round(info)
-    info = normalize(info)
+    constructor(str: string) {
+        this.info = parse(str)
 
-    return info
+        if (this.info === null) {
+            throw new Error('')
+        }
+    }
 }
 
-Color.parse = parse
-Color.get = get
-Color.set = set
-Color.convert = convert
-Color.format = format
-Color.round = round
-Color.normalize = normalize
-Color.isEqual = isEqual
+export default function (val: string | Color): Color {
+    if (val instanceof Color) {
+        return val
+    }
+
+    return new Color(val)
+}
 
 export * from './types'
