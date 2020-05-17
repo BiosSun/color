@@ -3,7 +3,7 @@
     "semi": false,
     "trailingComma": "all",
     "singleQuote": true,
-    "printWidth": 102,
+    "printWidth": 120,
     "overrides": [
         {
             "files": "__tests__/*.ts",
