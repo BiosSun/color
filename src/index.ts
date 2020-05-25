@@ -233,6 +233,22 @@ class Color {
 
         return true
     }
+
+    /**
+     * @see {@link https://thoughtbot.com/blog/closer-look-color-lightness A Closer Look at Color Lightness}
+     */
+    isDark() {
+        return !this.isLight()
+    }
+
+    /**
+     * @see {@link https://thoughtbot.com/blog/closer-look-color-lightness A Closer Look at Color Lightness}
+     */
+    isLight() {
+        const [r, g, b] = this.rgb.$v
+        const lightness = (r * 0.2126 + g * 0.7152 + b * 0.0722) / 255
+        return lightness > 0.6
+    }
 }
 
 interface Color {

@@ -215,4 +215,10 @@ describe('Color', () => {
 
         expect(Color('rgb(3, 121, 190)').toString('hsl_css4')).toBe('hsl(202 97% 38%)')
     })
+
+    test('isLight/isDark', () => {
+        expect(Color('#FFF').isLight()).toBe(true)
+        expect(Color('#000').isDark()).toBe(true)
+        expect(Color('rgb(3, 121, 190)').isDark()).toBe(true)
+    })
 })
