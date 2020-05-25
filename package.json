@@ -19,6 +19,7 @@
         "/*.d.ts"
     ],
     "devDependencies": {
+        "@biossun/color": "^1.1.1",
         "@rollup/plugin-typescript": "^4.1.1",
         "@types/benchmark": "^1.0.31",
         "@types/color-convert": "^1.9.0",

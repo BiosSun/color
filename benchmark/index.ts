@@ -1,12 +1,14 @@
 import { Suite } from 'benchmark'
 import * as colorString from 'color-string'
+import OldColor from '@biossun/color'
 import Color from '../src/index'
 
 function bench(value: string) {
     console.log(`\n> ${value}`)
 
     new Suite()
-        .add('@nami/color    ', () => Color(value))
+        .add('this           ', () => Color(value))
+        .add('prev this      ', () => OldColor(value))
         .add('colorString    ', () => colorString.get(value))
         .on('cycle', (event: Event) => console.log('  ' + event.target))
         .run()

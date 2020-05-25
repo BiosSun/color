@@ -8,7 +8,7 @@ const rollupTypescript = require('@rollup/plugin-typescript')
 gulp.task('benchmark', async () => {
     const bundle = await rollup.rollup({
         input: './benchmark/index.ts',
-        external: ['benchmark', 'color-string', 'color-convert'],
+        external: ['benchmark', '@biossun/color', 'color-string', 'color-convert'],
         plugins: [rollupTypescript()],
     })
 
