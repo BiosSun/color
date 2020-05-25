@@ -6,8 +6,11 @@
 
 -   hex: `#fff`, `#ffff`, `#ffffff`, `#ffffffff`;
 -   rgb: `rgb(255, 255, 255)`, `rgba(255, 255, 255, 1)`;
--   hsl: `hsl(0, 0%, 100%)`, `hsla(0, 0%, 100%)`;
--   hsv/hsb: `hsv(0, 0%, 100%)`, `hsba(0, 0%, 100%)`;
+-   hsl: `hsl(0, 0%, 100%)`, `hsla(0, 0%, 100%, 1)`;
+-   hsv/hsb: `hsv(0, 0%, 100%)`, `hsba(0, 0%, 100%, 1)`;
+-   rgb (css4): `rgb(255 255 255)`, `rgba(255 255 255 / 1)`;
+-   hsl (css4): `hsl(0 0% 100%)`, `hsla(0 0% 100% / 1)`;
+-   hsv/hsb _(css4)_: `hsv(0 0% 100%)`, `hsba(0 0% 100% / 1)`;
 
 ## 安装
 
@@ -22,55 +25,10 @@ $ yarn add @biossun/color
 import Color from '@biossun/color'
 
 Color('#0ad')
-// => { model: 'rgb', format: 'abbr_hex', state: 'normalized', value: [0, 170, 221], alpha: undefined }
-
 Color('#0379bedf')
-// => { model: 'rgb', format: 'hex', state: 'normalized', value: [3, 121, 190], alpha: 0.8745098 }
-
 Color('rgba(3, 121, 190, .1'))
-// => { model: 'rgb', format: 'rgb', state: 'normalized', value: [3, 121, 190], alpha: 0.1 }
-
 Color('hsla(202, 97%, 38%, .2'))
-// => { model: 'hsl', format: 'hsl', state: 'normalized', value: [202, 97, 38], alpha: 0.2 }
-
 Color('hsba(202, 98%, 75%, .2'))
-// => { model: 'hsv', format: 'hsb', state: 'normalized', value: [202, 98, 75], alpha: 0.3 }
-```
-
-## 解析（不进行标准化处理）
-
-```javascript
-import Color from '@biossun/color'
-
-Color.parse('#0ad')
-// => { model: 'rgb', format: 'abbr_hex', state: 'raw', value: [0, 170, 221], alpha: undefined }
-
-Color.parse('#0379bedf')
-// => { model: 'rgb', format: 'hex', state: 'raw', value: [3, 121, 190], alpha: 0.8745098 }
-
-Color.parse('rgba(3, 121, 190, .1'))
-// => { model: 'rgb', format: 'rgb', state: 'raw', value: [3, 121, 190], alpha: 0.1 }
-
-Color.parse('hsla(202, 97%, 38%, .2'))
-// => { model: 'hsl', format: 'hsl', state: 'raw', value: [202, 97, 38], alpha: 0.2 }
-
-Color.parse('hsba(202, 98%, 75%, .2'))
-// => { model: 'hsv', format: 'hsb', state: 'raw', value: [202, 98, 75], alpha: 0.3 }
-```
-
-## 标准化
-
-```javascript
-import Color from '@biossun/color'
-
-let info = Color.parse('hsla(201.7, 98.43, 200, -1)')
-// => { model: 'hsl', format: 'hsl', state: 'raw', value: [201.7, 98.43, 200], alpha: -1 }
-
-info = Color.round(info)
-// => { model: 'hsl', format: 'hsl', state: 'rounded', value: [202, 98, 100], alpha: 0 }
-
-info = Color.normalize(info)
-// => { model: 'hsl', format: 'hsl', state: 'normalized', value: [0, 0, 100], alpha: 0 }
 ```
 
 ## 访问属性
@@ -78,19 +36,19 @@ info = Color.normalize(info)
 ```javascript
 import Color from '@biossun/color'
 
-const info = Color('#0379be')
+const color = Color('#0379be')
 
-Color.get(info, 'alpha')
+color.alpha()
 // => undefined
 
-Color.get(info, 'red')
+color.red()
 // => 3
 
-Color.get(info, 'hue')
-// => 202
+color.hue()
+// => 202.1390374331551
 
-Color.get(info, 'saturationv')
-// => 75
+color.get('saturationv')
+// => 74.50980392156863
 ```
 
 ## 设置属性
@@ -98,19 +56,19 @@ Color.get(info, 'saturationv')
 ```javascript
 import Color from '@biossun/color'
 
-const info = Color('#0379be')
+const color = Color('#0379be')
 
-Color.set(info, 'alpha', 0.1)
-// => { model: 'rgb', format: 'hex', value: [3, 121, 190], alpha: 0.1 }
+color.alpha(0.1)
+// alpha is 0.1 with new color
 
-Color.set(info, 'red', 10)
-// => { model: 'rgb', format: 'hex', value: [10, 121, 190], alpha: undefined }
+color.red(10)
+// red is 10 with new color
 
-Color.set(info, 'hue', 10)
-// => { model: 'rgb', format: 'hex', value: [191, 35, 4], alpha: undefined }
+color.set('hue', 10)
+// hue is 10 with new color
 
-Color.set(info, 'saturationv', 10)
-// => { model: 'rgb', format: 'hex', value: [172, 184, 191], alpha: undefined }
+color.set({ hue: 10, saturationv: 10 })
+// hue is 10 and saturationv is 10 with new color
 ```
 
 ## 判断两个颜色是否相同
@@ -120,7 +78,23 @@ Color.set(info, 'saturationv', 10)
 ```javascript
 import Color from '@biossun/color'
 
-Color.isEqual(Color.parse('rgb(3, 122, 190)', Color.parse('hsv(202, 98, 75)')))
+const color1 = Color('rgb(3, 122, 190)')
+const color2 = Color('hsv(202, 98, 75)')
+
+color1.isEqual(color2)
+// => true
+
+Color.isEqual(color1, color2)
+// => true
+```
+
+## 判断颜色是亮色还是暗色
+
+```javascript
+Color('#fff').isLight()
+// => true
+
+Color('#000').isDark()
 // => true
 ```
 
@@ -129,13 +103,19 @@ Color.isEqual(Color.parse('rgb(3, 122, 190)', Color.parse('hsv(202, 98, 75)')))
 ```javascript
 import Color from '@biossun/color'
 
-const info = Color('#0379be')
+const color = Color('#0379be')
 
-Color.convert(info, 'hsv')
-// => { model: 'hsv', format: 'hsv', value: [202, 98, 75], alpha: undefined }
+color.rgb
+// new rgb color
 
-Color.convert(info, 'hsv', 'hsb')
-// => { model: 'hsv', format: 'hsb', value: [202, 98, 75], alpha: undefined }
+color.hsl
+// new hsl color
+
+color.hsv
+// new hsv color
+
+color.hsb
+// new hsv color and format is hsb
 ```
 
 ## 格式化
@@ -143,74 +123,159 @@ Color.convert(info, 'hsv', 'hsb')
 ```javascript
 import Color from '@biossun/color'
 
-const info = Color('#0379be')
+const color = Color('#0379BE')
 
-Color.format(info)
+color.format()
 // => '#0379be'
 
-Color.format(info, 'rgb')
+color.format('rgb')
+// => 'rgb(3, 122, 190)'
+
+color.red(3.1).format('rgb')
+// => 'rgb(3.1, 121, 190)'
+
+color.alpha(0.123).format('rgb')
+// => 'rgba(3.1, 121, 190, 0.123)'
+```
+
+## 格式化（normalized）
+
+```javascript
+import Color from '@biossun/color'
+
+const color = Color('#0379BE')
+
+color.toString()
+// => '#0379be'
+
+color.toString('rgb')
+// => 'rgb(3, 122, 190)'
+
+color.red(3.1).format('rgb')
 // => 'rgb(3, 121, 190)'
 
-info.alpha = 1
-Color.format(info, 'rgb')
-// => 'rgba(3, 121, 190, 1)'
+color.alpha(0.123).format('rgb')
+// => 'rgba(3.1, 121, 190, 0.12)'
 ```
 
 ## API
 
 ```typescript
 // 色彩模式
-export type ColorModel = 'rgb' | 'hsl' | 'hsv'
+export type ColorModel =
+    | 'rgb' | 'hsl' | 'hsv'
 
 // 序列化格式
-export type ColorFormat = 'hex' | 'abbr_hex' | 'rgb' | 'hsl' | 'hsv' | 'hsb'
+export type ColorFormat =
+    | 'hex'      | 'abbr_hex'
+    | 'rgb'      | 'hsl'      | 'hsv'      | 'hsb'
+    | 'rgb_css4' | 'hsl_css4' | 'hsv_css4' | 'hsb_css4'
 
 // 颜色属性
-export type ColorProperty = 'alpha' | 'red' | 'green' | 'blue' | 'hue' | 'saturationl' | 'saturationv' | 'lightness' | 'value' | 'brightness'
+export type ColorProperty =
+    | 'alpha'
+    | 'red' | 'green' | 'blue'
+    | 'hue' | 'saturationl' | 'saturationv' | 'lightness' | 'brightness'
 
-// 颜色信息对象的处理状态
-export type ColorInfoState = 'raw' | 'rounded' | 'normalized'
+// 颜色构造器
+export default function colorFactory(value: string): Color
 
-// 颜色信息
-export interface ColorInfo {
-    model: ColorModel
-    format: ColorFormat
-    state: ColorInfoState
-    value: number[]
-    alpha?: number
+// 判断颜色是否相等
+colorFactory.isEqual = (c1: Color, c2: Color) => boolean
+
+// 颜色类
+class Color {
+    // 颜色转换
+    // ---------------------------
+
+    // 转换为 rgb 颜色模式
+    get rgb(): Color
+
+    // 转换为 hsl 颜色模式
+    get hsl(): Color
+
+    // 转换为 hsv 颜色模式
+    get hsv(): Color
+
+    // 转换为 hsv 颜色模式，hsb 格式
+    get hsb(): Color
+
+    // 获取/设置颜色属性
+    // ---------------------------
+
+    // 获取或设置透明度
+    alpha(): number
+    alpha(value: number): Color
+
+    // 获取或设置红色（rgb）通道值
+    red(): number
+    red(value: number): Color
+
+    // 获取或设置绿色（rgb）通道值
+    green(): number
+    green(value: number): Color
+
+    // 获取或设置蓝色（rgb）通道值
+    blue(): number
+    blue(value: number): Color
+
+    // 获取或设置色调（hsl/hsv）通道值
+    hue(): number
+    hue(value: number): Color
+
+    // 获取或设置对比度（hsl）通道值
+    saturationl(): number
+    saturationl(value: number): Color
+
+    // 获取或设置亮度（hsl）通道值
+    lightness(): number
+    lightness(value: number): Color
+
+    // 获取或设置对比度（hsv）通道值
+    saturationv(): number
+    saturationv(value: number): Color
+
+    // 获取或设置明度（hsv）通道值
+    brightness(): number
+    brightness(value: number): Color
+
+    // 获取某个属性值
+    get(prop: ColorProperty): number
+
+    // 设置某个（或某几个）属性值
+    set(prop: ColorProperty, value: number): Color
+    set(props: Partial<Record<ColorProperty | 'alpha', number>>): Color
+
+    // 判断
+    // ---------------------------
+
+    // 判断是否与当前颜色相等
+    isEqual(otherColor: Color): boolean
+
+    // 判断当前颜色是否是偏浅色的
+    isLight(): boolean
+
+    // 判断当前颜色是否是偏暗色的
+    isDark(): boolean
+
+    // 格式化
+    // ---------------------------
+
+    // 当各颜色值规范化
+    // - 各通道值四舍五入为整数
+    // - 透明度值四舍五入为两位小数
+    // - 对于 hsl/hsv 颜色模式：
+    //   - 色度为 360 时，转换为 0
+    //   - 对比度为 0 时，色度转换为 0
+    //   - 亮度/明度为 0 时，色度及对比度转换为 0
+    // - 对于 hsl 颜色模式：
+    //   - 亮度为 100 时，色度及对比度转换为 0
+    normalize(): Color
+
+    // 格式化颜色
+    format(format: ColorFormat): string
+
+    // 格式化颜色（基本与 format 相同，但在在转换成目标颜色模式之后，格式化为字符串之前，会将颜色值规范化处理）
+    toString(format: ColorFormat): string
 }
-
-// 解析颜色字符串并标准化颜色值
-Color(str: string) => ColorInfo
-
-// 解析颜色字符串
-Color.parse(str: string) => ColorInfo
-
-// 将颜色的各通道值限定在标准区间内
-Color.round(info: ColorInfo) => ColorInfo
-
-// 将某些因受其它通道影响而不再起作用的通道的值转为该通道的初始值
-// 如在 hsl 模式中，亮度为 0 或 100 时，无论色相及对比度是什么值，颜色一律为黑色或白色，此时该方法会将色相和对比度转为 0。
-Color.normalize(info: ColorInfo) => ColorInfo
-
-// 判断两个颜色是否相同
-Color.isEqual(a: ColorInfo, b: ColorInfo) => string
-
-// 获取颜色属性值
-Color.get(info: ColorInfo, prop: ColorProperty): number
-
-// 设置颜色属性值
-// - 若所设置的值与当前颜色相同则返回原 info；
-Color.set(info, ColorInfo, prop: ColorProperty, value: number): ColorInfo
-
-// 转换颜色到指定模式（及格式）
-// - 若 model 与 info 相同且 format 未指定或同样与 info 相同则返回原 info；
-// - 若未指定 format 则默认与 model 相同；
-// - 若指定的 format 与 modal 不匹配则抛出异常。
-Color.convert(info: ColorInfo, model: ColorModel, format?: ColorForamt) => ColorInfo
-
-// 格式化颜色
-// - 默认按 info 中的格式处理；
-// - 也可以明确指定输出格式。
-Color.format(info: ColorInfo, format: ColorFormat = info.format) => string
 ```
