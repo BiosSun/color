@@ -7,8 +7,8 @@
     "author": "Bios Sun <biossun@gmail.com>",
     "license": "MIT",
     "scripts": {
-        "test": "jest",
-        "start": "jest --watch",
+        "test": "jest --coverage",
+        "start": "jest --watch --coverage",
         "prepublishOnly": "gulp build"
     },
     "files": [

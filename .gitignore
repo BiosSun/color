@@ -130,3 +130,5 @@ package-lock.json
 output/
 /*.js
 /*.d.ts
+
+/coverage
