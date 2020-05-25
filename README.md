@@ -138,7 +138,7 @@ color.alpha(0.123).format('rgb')
 // => 'rgba(3.1, 121, 190, 0.123)'
 ```
 
-## 格式化（normalized）
+## 格式化（normalized）
 
 ```javascript
 import Color from '@biossun/color'
