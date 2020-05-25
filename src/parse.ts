@@ -1,18 +1,23 @@
-import { ColorInfo, ColorFormat, ColorModel } from './types';
+import { ColorInfo, ColorFormat, ColorModel } from './types'
+import { clamp, round } from './utils'
 
 export default function parse(str: string): ColorInfo {
     if (typeof str !== 'string') {
         return null
     }
 
-    str = str?.trim() ?? ''
+    str = str.trim()
 
     if (str[0] === '#') {
         return parser.hex(str)
     } else if (str[0] === 'r' || str[0] === 'R') {
         return parser.rgb(str)
     } else if (str[0] === 'h' || str[0] === 'H') {
-        return parser.hslvb(str)
+        if (str[1] === 's' || str[1] === 'S') {
+            return parser.hslvb(str)
+        } else {
+            return null
+        }
     } else {
         return null
     }
@@ -20,8 +25,8 @@ export default function parse(str: string): ColorInfo {
 
 const r_hex = /^#([a-f0-9]{6})([a-f0-9]{2})?$/i
 const r_abbr_hex = /^#([a-f0-9]{3,4})$/i
-const r_rgb = /^rgba?\(\s*([+-]?[\d\.]+)\s*,\s*([+-]?[\d\.]+)\s*,\s*([+-]?[\d\.]+)\s*(?:,\s*([+-]?[\d\.]+)\s*)?\)$/i
-const r_hslvb = /^hs[lvb]a?\(\s*([+-]?[\d\.]+)\s*,\s*([+-]?[\d\.]+)%\s*,\s*([+-]?[\d\.]+)%\s*(?:,\s*([+-]?[\d\.]+)\s*)?\)$/i
+const r_rgb = /^rgba?\(\s*([+-]?[\d\.]+)(%)?(?:\s*(,)\s*|\s+)([+-]?[\d\.]+)(%)?(?:\s*(,)\s*|\s+)([+-]?[\d\.]+)(%)?\s*(?:(,|\/)\s*([+-]?[\d\.]+)(%)?\s*)?\)$/i
+const r_hslvb = /^hs[lvb]a?\(\s*([+-]?[\d\.]+)(?:deg)?(?:\s*(,)\s*|\s+)([+-]?[\d\.]+)%(?:\s*(,)\s*|\s+)([+-]?[\d\.]+)%\s*(?:(,|\/)\s*([+-]?[\d\.]+)(%)?\s*)?\)$/i
 
 const parser = {
     hex(str: string): ColorInfo {
@@ -55,7 +60,6 @@ const parser = {
         return {
             model: 'rgb',
             format,
-            state: 'raw',
             value: [parseInt(rhex, 16), parseInt(ghex, 16), parseInt(bhex, 16)],
             alpha: ahex ? parseInt(ahex, 16) / 255 : undefined,
         }
@@ -68,27 +72,62 @@ const parser = {
             return null
         }
 
-        const hasAlpha = str[3] === 'a' || str[3] === 'A'
-        const alpha = parseFloat(match[4])
+        const srg = match[3]
+        const sgb = match[6]
 
-        if (hasAlpha !== !isNaN(alpha)) {
+        if (srg !== sgb) {
             return null
         }
 
-        const h = parseFloat(match[1])
-        const s = parseFloat(match[2])
-        const l = parseFloat(match[3])
+        const rp = match[2]
+        const gp = match[5]
+        const bp = match[8]
 
-        if (isNaN(h) || isNaN(s) || isNaN(l)) {
+        if (rp !== gp || rp !== bp) {
             return null
+        }
+
+        let r = Number(match[1])
+        let g = Number(match[4])
+        let b = Number(match[7])
+
+        if (isNaN(r) || isNaN(g) || isNaN(b)) {
+            return null
+        }
+
+        if (rp) {
+            r = (r / 100) * 255
+            g = (g / 100) * 255
+            b = (b / 100) * 255
+        }
+
+        r = clamp(r, 0, 255)
+        g = clamp(g, 0, 255)
+        b = clamp(b, 0, 255)
+
+        const sba = match[9]
+
+        let a: number = undefined
+
+        if (sba) {
+            a = Number(match[10])
+
+            if (isNaN(a)) return null
+            if (srg ? sba !== ',' : sba !== '/') return null
+
+            // alpha percent symbol
+            if (match[11]) {
+                a = a / 100
+            }
+
+            a = clamp(a, 0, 1)
         }
 
         return {
             model: 'rgb',
-            format: 'rgb',
-            state: 'raw',
-            value: [h, s, l],
-            alpha: hasAlpha ? alpha : undefined,
+            format: srg ? 'rgb' : 'rgb_css4',
+            value: [r, g, b],
+            alpha: a,
         }
     },
 
@@ -99,22 +138,44 @@ const parser = {
             return null
         }
 
-        const hasAlpha = str[3] === 'a' || str[3] === 'A'
-        const alpha = parseFloat(match[4])
+        const shs = match[2]
+        const ssx = match[4]
 
-        if (hasAlpha !== !isNaN(alpha)) {
+        if (shs !== ssx) {
             return null
         }
 
-        const h = parseFloat(match[1])
-        const s = parseFloat(match[2])
-        const l = parseFloat(match[3])
+        let h = Number(match[1])
+        let s = Number(match[3])
+        let x = Number(match[5])
 
-        if (isNaN(h) || isNaN(s) || isNaN(l)) {
+        if (isNaN(h) || isNaN(s) || isNaN(x)) {
             return null
         }
 
-        const format =
+        h = round(h, 360)
+        s = clamp(s, 0, 100)
+        x = clamp(x, 0, 100)
+
+        const sxa = match[6]
+
+        let a: number = undefined
+
+        if (sxa) {
+            a = Number(match[7])
+
+            if (isNaN(a)) return null
+            if (shs ? sxa !== ',' : sxa !== '/') return null
+
+            // alpha percent symbol
+            if (match[8]) {
+                a = a / 100
+            }
+
+            a = clamp(a, 0, 1)
+        }
+
+        let format: ColorFormat =
             str[2] === 'l' || str[2] === 'L'
                 ? 'hsl'
                 : str[2] === 'v' || str[2] === 'V'
@@ -123,12 +184,15 @@ const parser = {
 
         const model = (format[2] === 'b' ? 'hsv' : format) as ColorModel
 
+        if (!shs) {
+            format = (format + '_css4') as ColorFormat
+        }
+
         return {
             model,
             format,
-            state: 'raw',
-            value: [h, s, l],
-            alpha: hasAlpha ? alpha : undefined,
+            value: [h, s, x],
+            alpha: a,
         }
     },
 }

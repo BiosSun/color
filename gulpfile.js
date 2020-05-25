@@ -22,7 +22,11 @@ gulp.task('benchmark', async () => {
 })
 
 gulp.task('build', async () => {
-    const tsp = ts.createProject('./tsconfig.json', { declaration: true })
+    const tsp = ts.createProject('./tsconfig.json', {
+        declaration: true,
+        module: 'CommonJS',
+        esModuleInterop: false,
+    })
 
     const tsResult = gulp.src(['src/*.ts']).pipe(tsp())
 

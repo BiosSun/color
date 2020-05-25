@@ -16,13 +16,6 @@
         "/types.js",
         "/utils.js",
         "/parse.js",
-        "/get.js",
-        "/set.js",
-        "/convert.js",
-        "/format.js",
-        "/round.js",
-        "/normalize.js",
-        "/is-equal.js",
         "/*.d.ts"
     ],
     "devDependencies": {
