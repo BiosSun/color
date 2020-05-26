@@ -30,7 +30,7 @@ describe('Color', () => {
 
         expect(c1.rgb).not.toBe(c1)
 
-        expect(() => c1.$convert('hsl', 'hsb')).toThrowError(`invalid format 'hsb' with model 'hsl'.`)
+        expect(() => c1['$convert']('hsl', 'hsb')).toThrowError(`invalid format 'hsb' with model 'hsl'.`)
     })
 
     test('get', () => {
