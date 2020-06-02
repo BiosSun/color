@@ -30,7 +30,62 @@ function isColorValue(val: any): val is ColorValue {
     return Array.isArray(val)
 }
 
-class Color {
+interface ColorConverter {
+    rgb: Color
+    hsl: Color
+    hsv: Color
+    hsb: Color
+}
+
+interface ColorGeterSeter {
+    alpha(): number
+    alpha(value: number): Color
+
+    red(): number
+    red(value: number): Color
+
+    green(): number
+    green(value: number): Color
+
+    blue(): number
+    blue(value: number): Color
+
+    hue(): number
+    hue(value: number): Color
+
+    saturationl(): number
+    saturationl(value: number): Color
+
+    lightness(): number
+    lightness(value: number): Color
+
+    saturationv(): number
+    saturationv(value: number): Color
+
+    brightness(): number
+    brightness(value: number): Color
+
+    get(prop: ColorProperty): number
+
+    set(prop: ColorProperty, value: number): Color
+    set(props: Partial<Record<ColorProperty | 'alpha', number>>): Color
+}
+
+interface ColorChecker {
+    isEqual(otherColor: Color): boolean
+    isDark(): boolean
+    isLight(): boolean
+}
+
+interface ColorFormater {
+    normalize(): Color
+    format(format?: ColorFormat): string
+    toString(format?: ColorFormat): string
+}
+
+interface Color extends ColorConverter, ColorGeterSeter, ColorChecker, ColorFormater {}
+
+class ColorImpl implements Color {
     $m: ColorModel
     $f: ColorFormat
     $a: number
@@ -43,7 +98,7 @@ class Color {
         this.$v = v
     }
 
-    private $convert(model: ColorModel, format?: ColorFormat): Color {
+    private $convert(model: ColorModel, format?: ColorFormat): ColorImpl {
         if (format === undefined) {
             format = model === this.$m ? this.$f : model
         } else {
@@ -90,7 +145,7 @@ class Color {
         return this
     }
 
-    private $normalize(): Color {
+    private $normalize(): ColorImpl {
         const { $m, $a, $v } = this
 
         if ($a !== undefined) {
@@ -146,31 +201,31 @@ class Color {
         return formater[this.$f](this.$v, this.$a)
     }
 
-    private clone(): Color {
-        return new Color([...this.$v] as ColorValue, this.$a, this.$m, this.$f)
+    private clone(): ColorImpl {
+        return new ColorImpl([...this.$v] as ColorValue, this.$a, this.$m, this.$f)
     }
 
-    get rgb(): Color {
+    get rgb(): ColorImpl {
         return this.clone().$convert('rgb')
     }
 
-    get hsl(): Color {
+    get hsl(): ColorImpl {
         return this.clone().$convert('hsl')
     }
 
-    get hsv(): Color {
+    get hsv(): ColorImpl {
         return this.clone().$convert('hsv')
     }
 
-    get hsb(): Color {
+    get hsb(): ColorImpl {
         return this.clone().$convert('hsv', 'hsb')
     }
 
-    isEqual(otherColor: Color): boolean {
-        return Color.isEqual(this, otherColor)
+    isEqual(otherColor: ColorImpl): boolean {
+        return ColorImpl.isEqual(this, otherColor)
     }
 
-    normalize(): Color {
+    normalize(): ColorImpl {
         return this.clone().$normalize()
     }
 
@@ -189,7 +244,7 @@ class Color {
         return color.$format()
     }
 
-    static isEqual(a: Color, b: Color): boolean {
+    static isEqual(a: ColorImpl, b: ColorImpl): boolean {
         const aIsNil = a === undefined || a === null
         const bIsNil = b === undefined || b === null
 
@@ -201,14 +256,14 @@ class Color {
             return false
         }
 
-        return Color.compare(a, b)
+        return ColorImpl.compare(a, b)
     }
 
-    private static compare(a: Color, b: Color): boolean {
+    private static compare(a: ColorImpl, b: ColorImpl): boolean {
         if (a.$m !== b.$m) {
             // rgb(3, 122, 190) => hsv(202, 98, 75)
             // hsv(202, 98, 75) => rgb(4, 123, 191)
-            return Color.compare(a, b[a.$m]) || Color.compare(a[b.$m], b)
+            return ColorImpl.compare(a, b[a.$m]) || ColorImpl.compare(a[b.$m], b)
         }
 
         a = a.normalize()
@@ -251,39 +306,8 @@ class Color {
     }
 }
 
-interface Color {
-    alpha(): number
-    alpha(value: number): Color
-
-    red(): number
-    red(value: number): Color
-
-    green(): number
-    green(value: number): Color
-
-    blue(): number
-    blue(value: number): Color
-
-    hue(): number
-    hue(value: number): Color
-
-    saturationl(): number
-    saturationl(value: number): Color
-
-    lightness(): number
-    lightness(value: number): Color
-
-    saturationv(): number
-    saturationv(value: number): Color
-
-    brightness(): number
-    brightness(value: number): Color
-
-    get(prop: ColorProperty): number
-
-    set(prop: ColorProperty, value: number): Color
-    set(props: Partial<Record<ColorProperty | 'alpha', number>>): Color
-}
+// NOTE
+interface ColorImpl extends ColorGeterSeter {}
 
 const CHANNEL_PROPERTY_DESCRIPTORS = new Map<ColorChannelProperty, ColorChannelDescriptor>()
     .set('red', [['rgb'], 0, clampFn(0, 255)])
@@ -295,7 +319,7 @@ const CHANNEL_PROPERTY_DESCRIPTORS = new Map<ColorChannelProperty, ColorChannelD
     .set('saturationv', [['hsv'], 1, clampFn(0, 100)])
     .set('brightness', [['hsv'], 2, clampFn(0, 100)])
 
-Object.assign(Color.prototype, {
+Object.assign(ColorImpl.prototype, {
     alpha(value?: any) {
         // get
         if (arguments.length === 0) {
@@ -325,7 +349,7 @@ Object.assign(Color.prototype, {
     set(
         props: ColorProperty | Partial<Record<ColorProperty | 'alpha', number>>,
         value?: number,
-    ): Color {
+    ): ColorImpl {
         if (typeof props === 'string') {
             return this[props](value)
         } else {
@@ -352,7 +376,7 @@ Object.assign(Color.prototype, {
 })
 
 function getset([models, channel, round]: ColorChannelDescriptor) {
-    return function (...args: [] | [number]): number | Color {
+    return function (...args: [] | [number]): number | ColorImpl {
         if (args.length === 0) {
             return this.$get(models, channel)
         } else {
@@ -458,10 +482,10 @@ function hslvb_css4(key: string, [h, s, x]: HSLTuple | HSVTuple, a: number): str
     return `hs${key}(${h} ${s}% ${x}%${a === undefined || a === 1 ? '' : ` / ${a}`})`
 }
 
-function color(value: string): Color
-function color(value: Color): Color
-function color(value: ColorValue, alpha: number, model: ColorModel, format: ColorFormat): Color
-function color(v: any, a?: any, m?: any, f?: any): Color {
+function Color(value: string): Color
+function Color(value: Color): Color
+function Color(value: ColorValue, alpha: number, model: ColorModel, format: ColorFormat): Color
+function Color(v: any, a?: any, m?: any, f?: any): Color {
     if (typeof v === 'string') {
         const info = parse(v)
 
@@ -469,17 +493,19 @@ function color(v: any, a?: any, m?: any, f?: any): Color {
             throw new Error(`invalid color: ${v}`)
         }
 
-        return new Color(info.value, info.alpha, info.model, info.format)
+        return new ColorImpl(info.value, info.alpha, info.model, info.format)
     } else if (isColorValue(v)) {
-        return new Color(v, a, m, f)
-    } else if (v instanceof Color) {
-        return new Color(v.$v, v.$a, v.$m, v.$f)
+        return new ColorImpl(v, a, m, f)
+    } else if (v instanceof ColorImpl) {
+        return new ColorImpl(v.$v, v.$a, v.$m, v.$f)
     } else {
         throw new Error('failed to build color instance.')
     }
 }
 
-color.isEqual = Color.isEqual
+namespace Color {
+    export const isEqual: (c1: Color, c2: Color) => boolean = ColorImpl.isEqual
+}
 
-export default color
+export default Color
 export * from './types'
