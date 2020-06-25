@@ -42,8 +42,8 @@ export type ColorFormat =
 export type ColorValue = RGBTuple | HSLTuple | HSVTuple
 
 export interface ColorInfo {
-    model: ColorModel
-    format: ColorFormat
-    value: ColorValue
-    alpha?: number
+    readonly model: ColorModel
+    readonly format: ColorFormat
+    readonly value: ColorValue
+    readonly alpha?: number
 }

@@ -11,6 +11,7 @@ import {
     ColorProperty,
     ColorChannelDescriptor,
     ColorChannelProperty,
+    ColorInfo,
 } from './types'
 
 const formatToModel: { [index in ColorFormat]: ColorModel } = {
@@ -83,7 +84,9 @@ interface ColorFormater {
     toString(format?: ColorFormat): string
 }
 
-interface Color extends ColorConverter, ColorGeterSeter, ColorChecker, ColorFormater {}
+interface Color extends ColorConverter, ColorGeterSeter, ColorChecker, ColorFormater {
+    readonly info: ColorInfo
+}
 
 class ColorImpl implements Color {
     $m: ColorModel
@@ -203,6 +206,15 @@ class ColorImpl implements Color {
 
     private clone(): ColorImpl {
         return new ColorImpl([...this.$v] as ColorValue, this.$a, this.$m, this.$f)
+    }
+
+    get info(): ColorInfo {
+        return {
+            format: this.$f,
+            model: this.$m,
+            value: this.$v,
+            alpha: this.$a,
+         };
     }
 
     get rgb(): ColorImpl {
@@ -503,9 +515,7 @@ function Color(v: any, a?: any, m?: any, f?: any): Color {
     }
 }
 
-namespace Color {
-    export const isEqual: (c1: Color, c2: Color) => boolean = ColorImpl.isEqual
-}
+Color.isEqual = ColorImpl.isEqual as ((c1: Color, c2: Color) => boolean)
 
 export default Color
 export * from './types'
