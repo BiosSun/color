@@ -79,6 +79,7 @@ interface ColorChecker {
 }
 
 interface ColorFormater {
+    round(): Color
     normalize(): Color
     format(format?: ColorFormat): string
     toString(format?: ColorFormat): string
@@ -148,7 +149,7 @@ class ColorImpl implements Color {
         return this
     }
 
-    private $normalize(): ColorImpl {
+    private $round(isNormalize: Boolean): ColorImpl {
         const { $m, $a, $v } = this
 
         if ($a !== undefined) {
@@ -166,13 +167,15 @@ class ColorImpl implements Color {
                 let s = Math.round($v[1])
                 let l = Math.round($v[2])
 
-                if (l === 0 || l === 100) {
-                    s = 0
-                    h = 0
-                } else if (s === 0) {
-                    h = 0
-                } else if (h === 360) {
-                    h = 0
+                if (isNormalize) {
+                    if (l === 0 || l === 100) {
+                        s = 0
+                        h = 0
+                    } else if (s === 0) {
+                        h = 0
+                    } else if (h === 360) {
+                        h = 0
+                    }
                 }
 
                 this.$v = [h, s, l]
@@ -183,13 +186,15 @@ class ColorImpl implements Color {
                 let s = Math.round($v[1])
                 let v = Math.round($v[2])
 
-                if (v === 0) {
-                    s = 0
-                    h = 0
-                } else if (s === 0) {
-                    h = 0
-                } else if (h === 360) {
-                    h = 0
+                if (isNormalize) {
+                    if (v === 0) {
+                        s = 0
+                        h = 0
+                    } else if (s === 0) {
+                        h = 0
+                    } else if (h === 360) {
+                        h = 0
+                    }
                 }
 
                 this.$v = [h, s, v]
@@ -214,7 +219,7 @@ class ColorImpl implements Color {
             model: this.$m,
             value: this.$v,
             alpha: this.$a,
-         };
+        }
     }
 
     get rgb(): ColorImpl {
@@ -237,8 +242,12 @@ class ColorImpl implements Color {
         return ColorImpl.isEqual(this, otherColor)
     }
 
+    round(): ColorImpl {
+        return this.clone().$round(false)
+    }
+
     normalize(): ColorImpl {
-        return this.clone().$normalize()
+        return this.clone().$round(true)
     }
 
     format(format = this.$f): string {
@@ -250,7 +259,7 @@ class ColorImpl implements Color {
         let color = this.clone().$convert(formatToModel[format], format)
 
         if (format !== 'hex' && format !== 'abbr_hex') {
-            color = color.$normalize()
+            color = color.$round(true)
         }
 
         return color.$format()
@@ -515,7 +524,7 @@ function Color(v: any, a?: any, m?: any, f?: any): Color {
     }
 }
 
-Color.isEqual = ColorImpl.isEqual as ((c1: Color, c2: Color) => boolean)
+Color.isEqual = ColorImpl.isEqual as (c1: Color, c2: Color) => boolean
 
 export default Color
 export * from './types'
